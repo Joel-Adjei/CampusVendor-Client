@@ -16,6 +16,7 @@ dfd
                     duration={1}
                 >
                     <p className="text-4xl text-black">Signup Page</p>
+                    Hello
                 </BlurFade>
             </section>
         </div>
