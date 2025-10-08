@@ -1,9 +1,18 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { BlurFade } from "@/components/ui/blur-fade"
 import Button from "@/components/ui/Button"
 import { AArrowUp } from "lucide-react"
+import { useAuthStore } from "@/store/authStore"
+import { useNavigate } from "react-router-dom"
 
 const Home =()=>{
+    const navigate = useNavigate()
+    const updateLogout = useAuthStore((state)=> state.updateLogout)
+    const isLogin = useAuthStore((state)=> state.isLogin)
+
+    useEffect(()=>{
+        !isLogin && navigate("/auth/login")
+    },[])
     return(
         <div>
             <BlurFade>
@@ -15,8 +24,7 @@ const Home =()=>{
                 variant="primary"
                 Icon={AArrowUp}
                 iconType="icon-left"
-                isLoading
-                onClick={()=> alert("You clicked")}
+                onClick={()=> updateLogout()}
             >
                 Click
             </Button>
