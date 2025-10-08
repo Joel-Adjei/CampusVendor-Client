@@ -4,6 +4,7 @@ import Button from "@/components/ui/Button"
 import { AArrowUp } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const Home =()=>{
     const navigate = useNavigate()
@@ -13,6 +14,11 @@ const Home =()=>{
     useEffect(()=>{
         !isLogin && navigate("/auth/login")
     },[])
+
+    const handleLogout =()=>{
+        updateLogout()
+        toast.success("Logged out successfully")
+    }
     return(
         <div>
             <BlurFade>
@@ -24,9 +30,9 @@ const Home =()=>{
                 variant="primary"
                 Icon={AArrowUp}
                 iconType="icon-left"
-                onClick={()=> updateLogout()}
+                onClick={isLogin ? handleLogout : ()=> navigate("/auth/login")}
             >
-                Click
+                {isLogin ? "Logout" : "Login"}
             </Button>
 
             <Button Icon={AArrowUp}  iconType="icon-only" variant="outline" />
