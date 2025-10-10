@@ -8,7 +8,7 @@ import Button from "@/components/ui/Button";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "react-toastify";
-import { gifs, images, videos } from "@/assets/assets";
+import { images, videos } from "@/assets/assets";
 
 const commonAuthSchema = {
   email: Yup.string()
@@ -70,17 +70,14 @@ const Login = () => {
         {/* <div className="absolute -top-20 -right-40 border-50 border-white/20 size-100 rounded-full" /> */}
         <div className="absolute md:hidden bottom-0 -left-10  bg-gradient-to-br from-white/60 to-70% to-transparent size-70 rounded-full" />
         <img src={images.img2} className="opacity-30 absolute -top-30 md:hidden " />
-        <img 
-          src={gifs.gif2} 
-           className="absolute hidden md:block top-0 left-0 w-full h-full object-cover"
-        />
-        {/* <video
+
+        <video
           className="absolute hidden md:block top-0 left-0 w-full h-full object-cover"
           src={videos.vid2} // Replace with your video file path
           autoPlay
           loop
           muted
-        ></video> */}
+        ></video>
         
         <div className="absolute top-11 left-1/2 transform -translate-x-1/2 md:left-3 md:top-4 z-30 flex gap-3 items-center ">
           <div className="bg-white font-Montserrat size-17 md:size-9 rounded-full"></div>

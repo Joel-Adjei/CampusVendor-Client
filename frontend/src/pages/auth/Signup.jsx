@@ -19,7 +19,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "react-toastify";
 import CustomSelect from "@/components/input/Select";
-import { gifs, images, videos } from "@/assets/assets";
+import { images, videos } from "@/assets/assets";
 
 const vendorCategories = [
   "Food",
@@ -155,18 +155,14 @@ const Signup = () => {
     <div className="min-h-[100vh] w-full flex flex-col md:flex-row  bg-gradient-to-br from-blue-700 to-blue-400">
       <section className="h-40 relative overflow-hidden md:min-h-[100vh] w-full md:bg-gradient-to-br md:from-blue-700 md:to-blue-400 md:flex-3/4">
         <img src={images.img1} className="opacity-30 absolute -top-30 md:hidden " />
-        <img 
-          src={gifs.gif1} 
-           className="absolute hidden md:block top-0 left-0 w-full h-full object-cover"
-        />
 
-        {/* <video
+        <video
           className="absolute hidden md:block top-0 left-0 w-full h-full object-cover"
           src={videos.vid1} // Replace with your video file path
           autoPlay
           loop
           muted
-        ></video> */}
+        ></video>
 
         <div className="absolute top-11 left-1/2 transform -translate-x-1/2 md:left-3 md:top-4 z-30 flex gap-3 items-center ">
           <div className="bg-white font-Montserrat size-17 md:size-9 rounded-full"></div>
