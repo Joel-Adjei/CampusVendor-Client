@@ -1,7 +1,7 @@
 import { Loader2, LoaderIcon } from "lucide-react";
 import React from "react"
 
-const Button =({children , onClick , disabled = false , type , isLoading = false , variant = "primary" , iconType="icon-left" , Icon , className})=>{
+const Button =({children , iconStyle , onClick , disabled = false , type , isLoading = false , variant = "primary" , iconType="icon-left" , Icon , className})=>{
 
     function getColors(){
         switch (variant) {
@@ -31,11 +31,11 @@ const Button =({children , onClick , disabled = false , type , isLoading = false
                         disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-300
                         ${getColors()}`}
         >
-            {isLoading && iconType === "icon-left" ? <Loader2 className="animate-spin" /> : (iconType === "icon-left" && Icon  && <Icon />)}
+            {isLoading && iconType === "icon-left" ? <Loader2 className={`${iconStyle} animate-spin`} /> : (iconType === "icon-left" && Icon  && <Icon />)}
 
             {children}
 
-            {isLoading && iconType === "icon-right"  ? <Loader2 className="animate-spin" /> : (iconType === "icon-right" && Icon  && <Icon />)}
+            {isLoading && iconType === "icon-right"  ? <Loader2 className={`${iconStyle} animate-spin`} /> : (iconType === "icon-right" && Icon  && <Icon />)}
         </button>
         :
         <button
@@ -44,7 +44,7 @@ const Button =({children , onClick , disabled = false , type , isLoading = false
             onClick={onClick}
             className={`${className} size-12 cursor-pointer flex justify-center items-center  rounded-full  ${getColors()}`}
         >
-              {Icon && <Icon />}  
+              {Icon && <Icon className={iconStyle} />}  
         </button>}
         </>
     )

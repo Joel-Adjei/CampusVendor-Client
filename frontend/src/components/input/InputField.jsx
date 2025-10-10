@@ -22,7 +22,7 @@ const InputField = ({
       onBlur={formik.handleBlur}
       value={formik.values[name]}
       placeholder={placeholder}
-      className={`mt-1 block w-full px-6 py-2.5 rounded-full bg-gray-200/30 text-blue-900 outline-none focus:shadow-sm focus:border focus:ring-[#ffcb05] focus:border-[#ffcb05] transition duration-150 ${
+      className={`mt-2 block w-full px-6 py-2.5 rounded-full bg-gray-200/30 text-blue-900 outline-none focus:shadow-sm focus:border focus:ring-[#ffcb05] focus:border-[#ffcb05] transition duration-150 ${
         formik.touched[name] && formik.errors[name]
           ? "border-red-500"
           : "border-gray-300"
