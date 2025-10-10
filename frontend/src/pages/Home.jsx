@@ -11,10 +11,6 @@ const Home =()=>{
     const updateLogout = useAuthStore((state)=> state.updateLogout)
     const isLogin = useAuthStore((state)=> state.isLogin)
 
-    useEffect(()=>{
-        !isLogin && navigate("/auth/login")
-    },[])
-
     const handleLogout =()=>{
         updateLogout()
         toast.success("Logged out successfully")

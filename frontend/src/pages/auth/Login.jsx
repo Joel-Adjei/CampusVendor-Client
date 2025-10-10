@@ -33,7 +33,7 @@ const Login = () => {
         updateLogin(values);
         updateName({ name: vendor.name });
         updateRole({ role: "vendor" });
-        navigate("/vendor/dashboard" , { replace: true });
+        navigate("/vendor/" , { replace: true });
         return;
       }
       // Check in users array
@@ -92,7 +92,7 @@ const Login = () => {
             delay={0.6}
             duration={1}
         >
-          <div className="w-full p-14 md:p-20 mt-17 font-inter">
+          <div className="w-full p-14 md:p-20 mt-17 font-Montserrat">
             <div className="flex flex-col justify-center mb-6">
               <h1 className="text-4xl mx-auto w-fit font-extrabold text-center">
                 <span className="bg-gradient-to-tr from-blue-700 to-blue-400 bg-clip-text text-transparent">
@@ -118,7 +118,6 @@ const Login = () => {
                 type="email"
                 Icon={Mail}
                 placeholder="e.g., test@ug.edu.gh or admin@ug.edu.gh"
-                isRequired
                 formikInstance={loginFormik}
               />
               <InputField
@@ -128,7 +127,6 @@ const Login = () => {
                 name="password"
                 type="password"
                 placeholder="Enter your password"
-                isRequired
                 formikInstance={loginFormik}
               />
 

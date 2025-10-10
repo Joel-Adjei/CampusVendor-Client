@@ -1,5 +1,5 @@
 import { BlurFade } from "@/components/ui/blur-fade";
-import React from "react";
+import React, { useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -84,15 +84,14 @@ const Signup = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const { signUpUser, updateLogin, signUpVendor } = useAuthStore();
   const navigate = useNavigate();
-
-  // Initial role is set to Customer by default
-  const [currentRole, setCurrentRole] = useState("Customer");
+  // const [currentRole, setCurrentRole] = useState("Customer");
+  const currentRole = useRef("Customer")
 
   const handleSignUp = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
 
     try {
-      if (values.role === "Customer") {
+      if (currentRole.current === "Customer") {
         const { role, email, password } = values;
         signUpUser({ role, email, password, name: "" });
         updateLogin({ email, password });
@@ -102,7 +101,7 @@ const Signup = () => {
         return;
       }
 
-      if (values.role === "Vendor") {
+      if (currentRole.current === "Vendor") {
         const { role, email, password, businessName, phoneNumber, category } =
           values;
         signUpVendor({
@@ -115,7 +114,6 @@ const Signup = () => {
           vendaorName: "",
           status: "Pending Approval",
         });
-        updateLogin({ email, password });
         toast.success("Registration successful! Await admin approval.");
         navigate("/");
         return;
@@ -142,7 +140,9 @@ const Signup = () => {
 
   // Function to handle role change and update Formik state immediately
   const handleRoleChange = (role) => {
-    setCurrentRole(role);
+    // setCurrentRole(role);
+    currentRole.current = role
+    console.log(currentRole)
     formik.setFieldValue("role", role);
     // Optionally, reset role-specific fields when switching
     formik.setFieldValue("studentId", "");
@@ -186,7 +186,7 @@ const Signup = () => {
                 <p className="text-center text-sm text-gray-600 mt-3">
                   Create an account to start{" "}
                   <span className="font-semibold">
-                    {currentRole === "Customer" ? "shopping" : "selling"}
+                    {currentRole.current === "Customer" ? "shopping" : "selling"}
                   </span>
                 </p>
               </div>
@@ -202,7 +202,7 @@ const Signup = () => {
                     formik.resetForm();
                   }}
                   className={`outline-none ${
-                    currentRole === "Customer"
+                    currentRole.current === "Customer"
                       ? "bg-white text-blue-700 shadow-md"
                       : "text-gray-500 hover:text-blue-600 border-none"
                   }`}
@@ -218,7 +218,7 @@ const Signup = () => {
                     formik.resetForm();
                   }}
                   className={`outline-none ${
-                    currentRole === "Vendor"
+                    currentRole.current === "Vendor"
                       ? "bg-white text-blue-700 shadow-md"
                       : "text-gray-500 hover:text-blue-600 border-none"
                   }`}
@@ -283,7 +283,7 @@ const Signup = () => {
                 />
 
                 {/* Vendor Specific Fields */}
-                {currentRole === "Vendor" && (
+                {currentRole.current === "Vendor" && (
                   <>
                     <InputField
                       Icon={LucideShoppingBasket}
@@ -331,7 +331,7 @@ const Signup = () => {
                     className={"mx-auto mt-3"}
                     isLoading={formik.isSubmitting}
                   >
-                    {formik.isSubmitting ? "" : `Register as ${currentRole}`}
+                    {formik.isSubmitting ? "" : `Register as ${currentRole.current}`}
                   </Button>
                 </div>
               </form>
