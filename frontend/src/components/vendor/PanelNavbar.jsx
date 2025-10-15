@@ -1,16 +1,18 @@
 import { useAuthStore } from "@/store/authStore";
 import { Bell, Home, Info, LogOut, Menu, MessageCircleIcon, Phone, Settings, ShoppingBag, ShoppingBasket, ShoppingCart, User, X } from "lucide-react";
-import React, { useState } from "react";
-import { href, NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { href, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
+import { images } from "@/assets/assets";
+import VendorProfilePanel from "./VendorProfilePanel";
 
 const navItems = [
-    { name: "Dashboard", href: "#home" , icon: Home},
-    { name: "Orders", href: "#how-it-works", icon: ShoppingBag },
-    { name: "Charts", href: "#why-us", icon: MessageCircleIcon },
-    { name: "Items", href: "#" , icon: ShoppingBasket}
+    { name: "Dashboard", href: "/vendor" , icon: Home},
+    { name: "Orders", href: "/vendor/orders", icon: ShoppingBag },
+    { name: "Chats", href: "/vendor/chat", icon: MessageCircleIcon },
+    { name: "Items", href: "/vendor/products" , icon: ShoppingBasket}
   ];
 
 
@@ -19,10 +21,26 @@ const PanelNavbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifiOpen, setNotifiOpen] = useState(false);
   const [currentTab , setCurrentTab] = useState(navItems[0])
+  // const currentTab = useRef(navItems[0])
+  // function setCurrentTab(value){
+  //   currentTab.current = value;
+  // }
+  const location = useLocation()
 
   const navigate = useNavigate()
   const isLogin = useAuthStore((state) => state.isLogin);
   const updateLogout = useAuthStore((state) => state.updateLogout);
+
+  const isActive=(item)=>{
+   setCurrentTab(item)
+  }
+
+  useEffect(()=>{
+    setCurrentTab(navItems.find((value)=> value.href == location.pathname))
+  },[])
+
+
+
 
 
 
@@ -38,15 +56,15 @@ const PanelNavbar = () => {
 
   return (
     <>
-    <nav className="bg-white shadow-lg md:pl-70 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-transparent w-full md:pl-70 sticky top-0 right-0 z-40">
+      <div className="bg-white shadow-lg shadow-gray-100 w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-15">
           
           <div className="flex items-center flex-row-reverse gap-2 flex-shrink-0">
-            <h2 className="flex gap-3 items-center text-xl text-blue-600 font-bold">
+            {/* <h2 className="flex gap-3 items-center text-xl text-blue-600 font-bold">
                 <currentTab.icon className="text-yellow-400" />
                 {currentTab.name}
-            </h2>
+            </h2> */}
 
             <div className="md:hidden flex items-center">
               <button
@@ -100,24 +118,7 @@ const PanelNavbar = () => {
         </Sidebar>
 
         <Sidebar isOpen={profileOpen} position="right" onOpen={setProfileOpen}>
-            <SidebarHeader onOpen={setProfileOpen}>
-                <div className="flex flex-col items-center gap-2">
-                    <User size={120} className="text-gray-400"/>
-                <div>
-                    <h1 className="font-medium text-gray-700">Lydia Osei</h1>
-                </div>
-                </div>
-            </SidebarHeader>
-
-            <div className="flex flex-1 flex-col gap-1">
-                <div className="flex-1 ">
-
-                </div>
-                
-                <div className="px-4 py-3">
-                    <Button variant="outline" Icon={LogOut} className={"w-full"} onClick={handleLogout}>Logout</Button>
-                </div>
-            </div>
+            <VendorProfilePanel onOpen={setProfileOpen} onLogout={handleLogout} />
         </Sidebar>
 
       {/* --- Mobile Off-Canvas Menu Content --- */}
@@ -126,22 +127,25 @@ const PanelNavbar = () => {
     </nav>
 
     <aside 
-        className="hidden md:block bg-white w-70 h-screen fixed left-0 top-0 z-50"
+        className="hidden md:block font-Montserrat bg-white shadow-lg w-70 h-screen fixed left-0 top-0 z-30"
     >
-       <div className=" bg-gray-200 h-15">
-        vbcbc
+       <div className=" bg-gray-50/ h-15 flex items-center p-2">
+          <img src={images.logo} className="h-10 w-10 object-contain mr-3" />
+          <h2 className="hidden md:block font-Montserrat text-2xl text-blue-500 font-extrabold tracking-tight">
+            Campus<span className="font-medium italic text-yellow-300"> Vendor</span>
+          </h2>
        </div>
 
        <div className="mt-4 flex h-[calc(100vh-4.85rem)] flex-col">
-            <div className=" pl-3 flex flex-1 flex-col">
+            <div className=" px-3 flex flex-1 flex-col">
               {navItems.map((item) => (
                 <NavLink
                   key={item.name}
                   to={item.href}
-                  onClick={()=> setCurrentTab(item)}
-                  className={`flex items-center gap-2 px-3 py-2 text-sm font-medium 
-                        ${currentTab.name == item.name ? 
-                            " bg-blue-600 text-gray-100 rounded-l-full" 
+                  onClick={()=> isActive(item)}
+                  className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium 
+                        ${currentTab?.name == item.name  ? 
+                            " bg-gradient-to-br to-blue-600 from-blue-500 text-gray-100 rounded-full" 
                             : "bg-white text-gray-600 hover:text-blue-600 "}
                             transition duration-150  ease-in-out `}
                 >
@@ -201,14 +205,15 @@ const MobileNavbar = ({setIsOpen , isOpen , items , isLogin , onLogout}) => {
     >
       {/* Menu Header with Logo and Close Button */}
       <div className="p-2 flex justify-end items-center bg-gradient-to-bl from-blue-600 to-blue-800 border-b border-gray-100">
-        <NavLink to="/" className="flex items-center space-x-2 mr-auto">
-          <div className="h-6 w-6 rounded-full bg-white flex items-center justify-center text-white font-bold text-sm">
-            C
+        <div className="flex items-center space-x-2 mr-auto">
+          <div className="h-8 w-8 p-1 rounded-full bg-white flex items-center justify-center text-white font-bold text-sm">
+            <img src={images.logo} className="h-6 w-6 object-contain mr-1" />
+            
           </div>
           <span className="text-md font-extrabold font-Montserrat text-gray-200 tracking-tight">
             Campus<span >Vendor</span>
           </span>
-        </NavLink>
+        </div>
         
         <button
           onClick={() => setIsOpen(false)}

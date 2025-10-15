@@ -8,7 +8,8 @@ const initialValue = {
     password: "",
     isLogin : false,
     role: "",
-    name: ""
+    userName: "",
+    description: "",
 }
 
 export const useAuthStore = create(
@@ -20,7 +21,8 @@ export const useAuthStore = create(
                 signUpVendor: (data) => set((state)=>({ vendors: [...state.vendors, data]})),
                 updateLogin: (data) => set(() => ({ isLogin: true, email: data.email, password: data.password })),
                 updateLogout: () => set(() => ({ isLogin: false, email: "", password: "", role: "", name: "" })),
-                updateName: (data) => set(() => ({ name: data.name })),
+                updateName: (data) => set(() => ({ name: data.userName })),
+                updateDescrip: (data) => set(() => ({ name: data.description })),
                 updateRole: (data) => set(() => ({ role: data })),
             }),
             {

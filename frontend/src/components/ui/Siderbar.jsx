@@ -19,7 +19,7 @@ const Sidebar = ({ children, width = "w-70", position = "right", isOpen , onOpen
 
   return (
     <div
-        className={`fixed inset-0 z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-50 transition-opacity duration-300 ${
         isOpen
           ? "opacity-100 visible"
           : "opacity-0 invisible pointer-events-none"
@@ -27,7 +27,7 @@ const Sidebar = ({ children, width = "w-70", position = "right", isOpen , onOpen
       onClick={() => onOpen(false)}
     >
         <div
-            className={`absolute inset-0 bg-black ${
+            className={`absolute inset-0 w-full bg-black ${
             isOpen ? "opacity-50" : "opacity-0"
         }`}
         ></div>
