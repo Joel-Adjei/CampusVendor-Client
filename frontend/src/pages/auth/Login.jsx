@@ -92,7 +92,7 @@ const Login = () => {
             delay={0.6}
             duration={1}
         >
-          <div className="w-full p-14 md:p-20 mt-17 font-Montserrat">
+          <div className="w-full p-14 md:p-2 lg:px-14 mt-17 font-Montserrat">
             <div className="flex flex-col justify-center mb-6">
               <h1 className="text-4xl mx-auto w-fit font-extrabold text-center">
                 <span className="bg-gradient-to-tr from-blue-700 to-blue-400 bg-clip-text text-transparent">

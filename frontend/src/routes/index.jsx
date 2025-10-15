@@ -1,10 +1,10 @@
-import App from "@/App";
 import AuthLayout from "@/layout/AuthLayout";
 import RootLayout from "@/layout/RootLayout";
 import VendorLayout from "@/layout/VendorLayout";
 import Login from "@/pages/auth/Login";
 import Signup from "@/pages/auth/Signup";
 import Home from "@/pages/Home";
+import VendorProduct from "@/pages/vendor/VendorProduct";
 import VendorHome from "@/pages/vendor/VendorHome";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -19,6 +19,7 @@ const Router = ()=>{
 
                 <Route path="vendor" element={<VendorLayout />}>
                     <Route index element={<VendorHome />} />
+                    <Route path="products" element={<VendorProduct />} />
                 </Route>
                 
                 <Route path="auth" element={<AuthLayout />}>

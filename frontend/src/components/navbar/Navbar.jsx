@@ -5,6 +5,8 @@ import { href, NavLink, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
+import VendorProfilePanel from "../vendor/VendorProfilePanel";
+import { images } from "@/assets/assets";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +16,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const isLogin = useAuthStore((state) => state.isLogin);
   const updateLogout = useAuthStore((state) => state.updateLogout);
+  const role = useAuthStore((state)=> state.role)
 
   const navItems = [
     { name: "Home", href: "#home" , icon: Home},
@@ -48,9 +51,8 @@ const Navbar = () => {
           <div className="flex font-Montserrat flex-row-reverse gap-2 flex-shrink-0">
             <a href="#" className="flex items-center space-x-2">
                 
-              <div className="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
-                C
-              </div>
+              <img src={images.logo} className="h-10 w-10 object-contain mr-3" />
+              
               <span className="hidden md:block text-2xl text-blue-500 font-extrabold tracking-tight">
                 Campus<span className="font-medium italic text-yellow-300"> Vendor</span>
               </span>
@@ -110,11 +112,11 @@ const Navbar = () => {
                 />
             </>
             ) : (
-              <div className="hidden sm:flex items-center">
-                <Button onClick={()=> handleNavigate("signup")}  variant="primary" className="ml-4">
+              <div className="flex items-center">
+                <Button onClick={()=> handleNavigate("signup")}  variant="primary" className="hidden md:flex ml-4 h-fit">
                     Get Started
                 </Button>
-                <Button onClick={()=> handleNavigate("login")} variant="outline" className={"ml-1"}>
+                <Button onClick={()=> handleNavigate("login")} variant="outline" className={"ml-1 h-fit"}>
                     Sign In
                 </Button>
               </div>
@@ -135,24 +137,7 @@ const Navbar = () => {
         </Sidebar>
 
         <Sidebar isOpen={profileOpen} position="right" onOpen={setProfileOpen}>
-            <SidebarHeader onOpen={setProfileOpen}>
-                <div className="flex flex-col items-center gap-2">
-                    <User size={120} className="text-gray-400"/>
-                <div>
-                    <h1 className="font-medium text-gray-700">Lydia Osei</h1>
-                </div>
-                </div>
-            </SidebarHeader>
-
-            <div className="flex flex-1 flex-col gap-1">
-                <div className="flex-1 ">
-
-                </div>
-                
-                <div className="px-4 py-3">
-                    <Button variant="outline" Icon={LogOut} className={"w-full"} onClick={handleLogout}>Logout</Button>
-                </div>
-            </div>
+            {role === "vendor" && <VendorProfilePanel />}
         </Sidebar>
 
       {/* --- Mobile Off-Canvas Menu Content --- */}
@@ -165,13 +150,6 @@ const Navbar = () => {
 
 export default Navbar;
 
-const DestopNavbar = () => {
-  return (
-    <nav className="hidden md:flex">
-      <h1>Desktop Navbar</h1>
-    </nav>
-  );
-};
 
 const MobileNavbar = ({setIsOpen , isOpen , items , isLogin , onLogout}) => {
     const navigate = useNavigate()
@@ -214,8 +192,8 @@ const MobileNavbar = ({setIsOpen , isOpen , items , isLogin , onLogout}) => {
       {/* Menu Header with Logo and Close Button */}
       <div className="p-2 flex justify-end items-center bg-gradient-to-bl from-blue-400 to-blue-800 border-b border-gray-100">
         <NavLink to="/" className="flex items-center space-x-2 mr-auto">
-          <div className="h-6 w-6 rounded-full bg-white flex items-center justify-center text-white font-bold text-sm">
-            C
+          <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center p-1 text-white font-bold text-sm">
+            <img src={images.logo} className="h-6 w-6 object-contain mr-1.5" />
           </div>
           <span className="text-md font-extrabold font-Montserrat text-gray-100 tracking-tight">
             Campus<span className="font-medium italic text-yellow-300" > Vendor</span>
@@ -244,25 +222,7 @@ const MobileNavbar = ({setIsOpen , isOpen , items , isLogin , onLogout}) => {
           </NavLink>
         ))}
 
-        {/* Sign In Button */}
-        { !isLogin &&
-            <>
-            <Button
-                variant="primary"
-                className="w-full mt-10"
-                onClick={()=> handleNavigate("signup")}
-            >
-                Get Started
-            </Button>
-            <Button
-                variant="outline"
-                className={"w-full mt-3"}
-                onClick={()=> handleNavigate("login")}
-            >
-                Sign In
-            </Button>
-            </>
-        }
+        
       </div>
     </div>
   </div>

@@ -170,10 +170,10 @@ const Signup = () => {
         </div>
       </section>
 
-      <section className=" bg-gray-50 flex-1 md:flex-1/2 md:h-[100vh] overflow-auto rounded-t-2xl md:rounded-none">
+      <section className=" bg-gray-50 font-Montserrat flex-1 md:flex-1/2 md:h-[100vh] overflow-auto rounded-t-2xl md:rounded-none">
         <BlurFade direction="top" blur="0" delay={0.6} duration={1}>
           <div className="md:min-h-screen h-full flex items-center justify-center p-4 font-inter overflow-auto">
-            <div className="w-full mt-7 md:px-13  max-w-lg ">
+            <div className="w-full mt-7 sm:px-2 lg:px-11 max-w-lg ">
               <div className="flex flex-col justify-center mb-6">
                 <h1 className="text-4xl mx-auto w-fit font-extrabold text-center">
                   <span className="bg-gradient-to-tr from-blue-700 to-blue-400 bg-clip-text text-transparent">
