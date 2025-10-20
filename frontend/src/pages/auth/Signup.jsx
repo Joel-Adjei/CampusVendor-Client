@@ -1,9 +1,7 @@
 import { BlurFade } from "@/components/ui/blur-fade";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useState } from "react";
-import { create } from "zustand";
 import Button from "@/components/ui/Button";
 import InputField from "@/components/input/InputField";
 import {
@@ -11,6 +9,7 @@ import {
   LockIcon,
   LucideShoppingBasket,
   Mail,
+  Map,
   Phone,
   ShoppingBasket,
   User2,
@@ -21,25 +20,6 @@ import { toast } from "react-toastify";
 import CustomSelect from "@/components/input/Select";
 import { images, videos } from "@/assets/assets";
 
-const vendorCategories = [
-  "Food",
-  "Stationery",
-  "Grooming (Haircuts, Braiding)",
-  "Thrift Clothing",
-  "Mobile Money Services",
-  "Gadgets/Tech",
-  "Other Products/Services",
-];
-
-const catergoryOptions = [
-  { value: "Food", label: "Food" },
-  { value: "Stationery", label: "Stationery" },
-  { value: "Grooming", label: "Grooming (Haircuts, Braiding)" },
-  { value: "Thrift-Clothing", label: "Thrift Clothing" },
-  { value: "Mobile Money", label: "Mobile Money Services" },
-  { value: "Gadgets/Tech", label: "Gadgets/Tech" },
-  { value: "Others", label: "Other Products/Services" },
-];
 
 // --- 3. Yup Validation Schema ---
 const validationSchema = Yup.object().shape({
@@ -62,21 +42,29 @@ const validationSchema = Yup.object().shape({
   }),
   phoneNumber: Yup.string().when("role", {
     is: "Vendor",
-    // Basic regex for digits only, and checking length
     then: (schema) =>
       schema
         .matches(/^[0-9]{9,15}$/, "Must be a valid phone number")
-        .required("Phone Number is required for Vendors"),
-    otherwise: (schema) => schema.notRequired(),
+        .required("Phone Number is required for"),
   }),
-  category: Yup.string().when("role", {
+  description: Yup.string().when("role", {
     is: "Vendor",
     then: (schema) =>
       schema
-        .oneOf(vendorCategories, "Must select a category")
-        .required("Category is required for Vendors"),
+        .max(200, "Description can't exceed 200 characters")
+        .required("Description is required for Vendors"),
     otherwise: (schema) => schema.notRequired(),
   }),
+  location: Yup.string().when("role", {
+    is: "Vendor",
+    then: (schema) => schema.required("Location is required for Vendors"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  name: Yup.string().when("role", {
+    is: "Vendor",
+    then: (schema) => schema.required("Name is required for Vendors"),
+    otherwise: (schema) => schema.notRequired(),
+  })
 });
 
 const Signup = () => {
@@ -84,8 +72,10 @@ const Signup = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const { signUpUser, updateLogin, signUpVendor } = useAuthStore();
   const navigate = useNavigate();
-  // const [currentRole, setCurrentRole] = useState("Customer");
-  const currentRole = useRef("Customer")
+  const currentRole = useRef("Customer");
+  const setCurrentRole = (role) => {
+    currentRole.current = role;
+  }
 
   const handleSignUp = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
@@ -102,17 +92,9 @@ const Signup = () => {
       }
 
       if (currentRole.current === "Vendor") {
-        const { role, email, password, businessName, phoneNumber, category } =
-          values;
         signUpVendor({
-          role,
-          email,
-          password,
-          businessName,
-          phoneNumber,
-          category,
-          vendaorName: "",
-          status: "Pending Approval",
+          ...values,
+          status: "pending",
         });
         toast.success("Registration successful! Await admin approval.");
         navigate("/");
@@ -120,19 +102,20 @@ const Signup = () => {
       }
     } catch (error) {
       throw new Error(error);
-    } finally {
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      role: "Customer", // Initial value set to Customer
+      role: currentRole,
       email: "",
       password: "",
       confirmPassword: "",
-      businessName: "", // Vendor field
-      phoneNumber: "", // Vendor field
-      category: "", // Vendor field
+      name: "",
+      businessName: "",
+      description: "",
+      location: "",
+      phoneNumber: "",
     },
     validationSchema: validationSchema,
     onSubmit: handleSignUp,
@@ -140,15 +123,20 @@ const Signup = () => {
 
   // Function to handle role change and update Formik state immediately
   const handleRoleChange = (role) => {
-    // setCurrentRole(role);
-    currentRole.current = role
-    console.log(currentRole)
-    formik.setFieldValue("role", role);
-    // Optionally, reset role-specific fields when switching
-    formik.setFieldValue("studentId", "");
-    formik.setFieldValue("businessName", "");
-    formik.setFieldValue("phoneNumber", "");
-    formik.setFieldValue("category", "");
+    formik.resetForm()
+    setCurrentRole(role);
+    formik.setValues({
+      role: role,
+      email: "",
+      password: "",
+      confirmPassword: "",
+      businessName: "",
+      description: "",
+      location: "",
+      phoneNumber: "",
+      category: "",
+    });
+    console.log("Role changed to:", formik.values.role);
   };
 
   return (
@@ -158,7 +146,7 @@ const Signup = () => {
 
         <video
           className="absolute hidden md:block top-0 left-0 w-full h-full object-cover"
-          src={videos.vid1} // Replace with your video file path
+          src={videos.vid1}
           autoPlay
           loop
           muted
@@ -166,7 +154,6 @@ const Signup = () => {
 
         <div className="absolute top-11 left-1/2 transform -translate-x-1/2 md:left-3 md:top-4 z-30 flex gap-3 items-center ">
           <div className="bg-white font-Montserrat size-17 md:size-9 rounded-full"></div>
-
         </div>
       </section>
 
@@ -197,26 +184,20 @@ const Signup = () => {
                   type="button"
                   variant="outline"
                   Icon={User2}
-                  onClick={() => {
-                    handleRoleChange("Customer");
-                    formik.resetForm();
-                  }}
+                  onClick={() => handleRoleChange("Customer")}
                   className={`outline-none ${
                     currentRole.current === "Customer"
                       ? "bg-white text-blue-700 shadow-md"
                       : "text-gray-500 hover:text-blue-600 border-none"
                   }`}
                 >
-                  Student
+                  Customer
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   Icon={ShoppingBasket}
-                  onClick={() => {
-                    handleRoleChange("Vendor");
-                    formik.resetForm();
-                  }}
+                  onClick={() => handleRoleChange("Vendor")}
                   className={`outline-none ${
                     currentRole.current === "Vendor"
                       ? "bg-white text-blue-700 shadow-md"
@@ -252,8 +233,6 @@ const Signup = () => {
                 onSubmit={formik.handleSubmit}
                 className="w-full p-7 md:p-2 pt-0 space-y-7"
               >
-                {/* <input type="hidden" name="role" value={formik.values.role} /> */}
-
                 <InputField
                   label="Email"
                   Icon={Mail}
@@ -263,6 +242,76 @@ const Signup = () => {
                   isRequired
                   formik={formik}
                 />
+
+                {/* Vendor Specific Fields */}
+                {currentRole.current === "Vendor" && (
+                  <>
+                  
+                  <div className="relative flex items-center justify-center w-full mt-6 mb-2 py-3">
+                      <div className="w-full h-[1px] bg-gray-300"></div>
+                      <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-gray-50 px-3 italic text-gray-500 text-xs">
+                        Business Details
+                      </span>
+                    </div>
+
+                    <InputField
+                      label="Name"
+                      name="name"
+                      type="text"
+                      formik={formik}
+                      isRequired
+                      placeholder={"e.g., 'Abigail Adjei"}
+                      Icon={User2}
+                    />
+                    <InputField
+                      Icon={LucideShoppingBasket}
+                      label="Business/Seller Name"
+                      name="businessName"
+                      type="text"
+                      placeholder="e.g., 'Legon Thrift' or 'Mama B's Kitchen'"
+                      isRequired
+                      formik={formik}
+                    />
+                    <InputField
+                      label="Description"
+                      name="description"
+                      Icon={User2}
+                      type="text"
+                      placeholder="Briefly describe your business (max 200 characters)"
+                      isRequired
+                      formik={formik}
+                      as="textarea"
+                    />
+
+                    <InputField
+                      label="Location"
+                      name="location"
+                      Icon={Map}
+                      type="text"
+                      placeholder="e.g., Near Legon Hall or Opposite UGCS"
+                      isRequired
+                      formik={formik}
+                    />
+
+                    <InputField
+                      label="Phone Number"
+                      name="phoneNumber"
+                      Icon={Phone}
+                      type="tel"
+                      placeholder="e.g., 055xxxxxxx"
+                      isRequired
+                      formik={formik}
+                    />
+
+                    <div className="relative flex items-center justify-center w-full mt-6 mb-2 py-3">
+                      <div className="w-full h-[1px] bg-gray-300"></div>
+                      <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-gray-50 px-3 italic text-gray-500 text-xs">
+                        Set Password
+                      </span>
+                    </div>
+                  </>
+                )}
+
                 <InputField
                   label="Password"
                   name="password"
@@ -281,47 +330,6 @@ const Signup = () => {
                   isRequired
                   formik={formik}
                 />
-
-                {/* Vendor Specific Fields */}
-                {currentRole.current === "Vendor" && (
-                  <>
-                    <InputField
-                      Icon={LucideShoppingBasket}
-                      label="Business/Seller Name"
-                      name="businessName"
-                      type="text"
-                      placeholder="e.g., 'Legon Thrift' or 'Mama B's Kitchen'"
-                      isRequired
-                      formik={formik}
-                    />
-                    <InputField
-                      label="Phone Number"
-                      name="phoneNumber"
-                      Icon={Phone}
-                      type="tel"
-                      placeholder="e.g., 055xxxxxxx"
-                      isRequired
-                      formik={formik}
-                    />
-
-                    <div>
-                      <CustomSelect
-                        Icon={LucideShoppingBasket}
-                        label="Main Product Category"
-                        name="category"
-                        options={catergoryOptions}
-                        value={formik.values.category}
-                        onChange={(option) =>
-                          formik.setFieldValue(
-                            "category",
-                            option ? option.value : ""
-                          )
-                        }
-                        disabled={formik.isSubmitting}
-                      />
-                    </div>
-                  </>
-                )}
 
                 {/* Submit Button */}
                 <div className="mt-4">

@@ -1,25 +1,37 @@
 import { useAuthStore } from "@/store/authStore";
 import { Bell, Home, Info, LogOut, Menu, MessageCircleIcon, Phone, Settings, ShoppingBag, ShoppingBasket, ShoppingCart, User, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { href, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {  NavLink, useLocation, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
 import { images } from "@/assets/assets";
 import VendorProfilePanel from "./VendorProfilePanel";
 
-const navItems = [
+const vendorNavItems = [
     { name: "Dashboard", href: "/vendor" , icon: Home},
     { name: "Orders", href: "/vendor/orders", icon: ShoppingBag },
     { name: "Chats", href: "/vendor/chat", icon: MessageCircleIcon },
     { name: "Items", href: "/vendor/products" , icon: ShoppingBasket}
-  ];
+];
+
+const adminNavItems = [
+    { name: "Dashboard", href: "/admin" , icon: Home},
+    { name: "Vendors", href: "/admin/vendors", icon: ShoppingBag },
+    { name: "Customers", href: "/admin/users", icon: User },
+    { name: "Products", href: "/admin/products" , icon: ShoppingCart},
+    { name: "Settings", href: "/admin/settings", icon: Settings}
+];
+
 
 
 const PanelNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifiOpen, setNotifiOpen] = useState(false);
+  const role = useAuthStore((state) => state.role);
+  
+  const navItems = role.role === "admin" ? adminNavItems : vendorNavItems;
   const [currentTab , setCurrentTab] = useState(navItems[0])
   // const currentTab = useRef(navItems[0])
   // function setCurrentTab(value){
