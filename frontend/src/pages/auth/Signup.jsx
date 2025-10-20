@@ -19,6 +19,8 @@ import { useAuthStore } from "@/store/authStore";
 import { toast } from "react-toastify";
 import CustomSelect from "@/components/input/Select";
 import { images, videos } from "@/assets/assets";
+import Modal from "@/components/ui/Modal";
+import TermsConditions from "../vendor/TermsConditions";
 
 
 // --- 3. Yup Validation Schema ---
@@ -70,11 +72,17 @@ const validationSchema = Yup.object().shape({
 const Signup = () => {
   const { login, user } = useAuthStore();
   const [successMessage, setSuccessMessage] = useState("");
+  const [displayTerms, setDisplayTerms] = useState(false);
   const { signUpUser, updateLogin, signUpVendor } = useAuthStore();
   const navigate = useNavigate();
   const currentRole = useRef("Customer");
   const setCurrentRole = (role) => {
     currentRole.current = role;
+  }
+
+  const onVendorSubmit = (e) => {
+    e.preventDefault();
+    setDisplayTerms(true);
   }
 
   const handleSignUp = (values, { setSubmitting, resetForm }) => {
@@ -97,7 +105,7 @@ const Signup = () => {
           status: "pending",
         });
         toast.success("Registration successful! Await admin approval.");
-        navigate("/");
+        navigate("/auth/note/vendor");
         return;
       }
     } catch (error) {
@@ -230,7 +238,10 @@ const Signup = () => {
               )}
 
               <form
-                onSubmit={formik.handleSubmit}
+                onSubmit={ 
+                  currentRole.current == "Customer" ? formik.handleSubmit
+                  : onVendorSubmit
+                }
                 className="w-full p-7 md:p-2 pt-0 space-y-7"
               >
                 <InputField
@@ -357,6 +368,12 @@ const Signup = () => {
           </div>
         </BlurFade>
       </section>
+
+      <Modal
+        display={displayTerms}
+      >
+        <TermsConditions onAccept={formik.handleSubmit} onCancel={()=> setDisplayTerms(false)} />
+      </Modal>
     </div>
   );
 };
