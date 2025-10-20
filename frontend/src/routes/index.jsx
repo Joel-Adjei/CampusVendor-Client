@@ -7,6 +7,9 @@ import Home from "@/pages/Home";
 import VendorProduct from "@/pages/vendor/VendorProduct";
 import VendorHome from "@/pages/vendor/VendorHome";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminLayout from "@/layout/AdminLayout";
+import AdminVendors from "@/pages/admin/AdminVendors";
 
 
 const Router = ()=>{
@@ -20,6 +23,11 @@ const Router = ()=>{
                 <Route path="vendor" element={<VendorLayout />}>
                     <Route index element={<VendorHome />} />
                     <Route path="products" element={<VendorProduct />} />
+                </Route>
+
+                <Route path="admin" element={<AdminLayout />}>
+                   <Route index element={<AdminDashboard />} />
+                   <Route path="vendors" element={<AdminVendors />} />
                 </Route>
                 
                 <Route path="auth" element={<AuthLayout />}>

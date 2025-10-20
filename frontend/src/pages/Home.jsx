@@ -17,21 +17,7 @@ const Home =()=>{
     }
     return(
         <div>
-            <BlurFade>
-                <p className="text-4xl">Home Page</p> 
-            </BlurFade>
-
-            <Button
-                className={""}
-                variant="primary"
-                Icon={AArrowUp}
-                iconType="icon-left"
-                onClick={isLogin ? handleLogout : ()=> navigate("/auth/login")}
-            >
-                {isLogin ? "Logout" : "Login"}
-            </Button>
-
-            <Button Icon={AArrowUp}  iconType="icon-only" variant="outline" />
+            
                 
         </div>
     )

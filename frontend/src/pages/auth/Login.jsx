@@ -21,7 +21,7 @@ const loginValidationSchema = Yup.object().shape(commonAuthSchema);
 
 const Login = () => {
   const navigate = useNavigate()
-  const {updateLogin , updateName , updateRole , vendors , users} = useAuthStore()
+  const {updateLogin , updateVendor, admins , updateName , updateRole , vendors , users} = useAuthStore()
 
   const handleLogIn = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
@@ -31,8 +31,7 @@ const Login = () => {
       const vendor = vendors.find((v => v.email === email && v.password === password));
       if (vendor) {
         updateLogin(values);
-        updateName({ name: vendor.name });
-        updateRole({ role: "vendor" });
+        updateVendor(vendor);
         navigate("/vendor/" , { replace: true });
         return;
       }
@@ -45,7 +44,19 @@ const Login = () => {
         navigate("/" , { replace: true });
         return;
       }
+
+      const admin = admins.find((a => a.email === email && a.password === password));
+      if (admin) {
+        updateLogin({ email, password });
+        updateName({ name: admin.name });
+        updateRole({ role: "admin" });
+        navigate("/admin/" , { replace: true });
+        resetForm()
+        return;
+      }
+      
       toast.error("Invalid email or password");
+      // resetForm();
       
     } catch (error) {
       toast.error("An error occurred during login. Please try again.");
