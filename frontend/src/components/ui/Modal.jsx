@@ -1,10 +1,12 @@
 import React from "react";
 
-const Modal =()=>{
+const Modal =({ display , children})=>{
+    if(!display) return null;
+
     return(
-        <section className="fixed flex justify-center items-center top-0 z-70 w-full h-[100vh] bg-black/30 backdrop-blur-xs">
-            <div className="min-w-2xl rounded-2xl h-100 bg-white">
-                <h2 className="w-full text-center font-semibold bg-gray-200">SetUp</h2>
+        <section className="fixed flex justify-center items-center top-0 z-50 w-full h-[100vh] bg-black/50 backdrop-blur-xs p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] ">
+                {children}
             </div>
         </section>
     )

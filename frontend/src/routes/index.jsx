@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminLayout from "@/layout/AdminLayout";
 import AdminVendors from "@/pages/admin/AdminVendors";
+import Notes from "@/components/vendor/Notes";
 
 
 const Router = ()=>{
@@ -33,6 +34,7 @@ const Router = ()=>{
                 <Route path="auth" element={<AuthLayout />}>
                         <Route index path="login" element={<Login />} />
                         <Route path="signup" element={<Signup />} />
+                        <Route path="note/vendor" element={<Notes />} />
                 </Route>
             </Routes>
         </BrowserRouter>
