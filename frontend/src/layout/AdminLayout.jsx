@@ -6,7 +6,7 @@ const AdminLayout = () => {
   return (
     <div>
         <PanelNavbar />
-        <div className="min-h-[calc(100vh-3.85rem)] bg-gray-50 md:pl-70">
+        <div className="min-h-[calc(100vh-3.85rem)] bg-gray-50 md:pl-65">
             <Outlet />
         </div>
     </div>
