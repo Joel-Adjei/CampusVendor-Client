@@ -1,12 +1,13 @@
 import { useAuthStore } from "@/store/authStore";
-import { Bell, Home, Info, LogOut, Menu, Phone, Settings, ShoppingBasket, ShoppingCart, User, X } from "lucide-react";
+import { Bell, Home, Info, LogOut, Menu, Phone, Search, Settings, ShoppingBasket, ShoppingCart, User, X } from "lucide-react";
 import React, { useState } from "react";
-import { href, NavLink, useNavigate } from "react-router-dom";
-import Button from "../ui/Button";
+import { NavLink, useNavigate } from "react-router-dom";
+import Button from "../ui/custom/Button";
 import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
 import VendorProfilePanel from "../vendor/VendorProfilePanel";
 import { images } from "@/assets/assets";
+import UserProfilePanel from "../user/UserProfilePanel";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +49,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-15">
           {/* Logo/Brand Name */}
-          <div className="flex font-Montserrat flex-row-reverse gap-2 flex-shrink-0">
+          <div className="flex font-Montserrat items-center flex-row-reverse gap-2 flex-shrink-0">
+            <Search 
+              className="sm:hidden left-3 top-2.5 w-5 h-5 text-gray-400" 
+              onClick={()=> navigate("/search")}
+            />
+            
             <a href="#" className="flex items-center space-x-2">
                 
               <img src={images.logo} className="h-10 w-10 object-contain mr-3" />
@@ -60,7 +66,7 @@ const Navbar = () => {
 
             <div className="md:hidden flex items-center">
               <button
-                onClick={() => setIsOpen(true)} // Opens the fixed panel
+                onClick={() => setIsOpen(true)} 
                 type="button"
                 className="inline-flex cursor-pointer items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition duration-150 ease-in-out"
                 aria-expanded={isOpen}
@@ -71,7 +77,20 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop Menu Items (Hidden on Mobile) */}
+          <div className="hidden sm:block">
+            <div className="relative flex items-center">
+              <Search className="sm:absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search items..."
+                className="hidden sm:block w-64 px-4 py-1.5 pl-9 border border-gray-300 rounded-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                onFocus={() => navigate("/search")}
+              />
+
+            </div>
+          </div>
+
+          {/* Desktop Menu Items  */}
           <div className="hidden md:flex  items-center ">
             {navItems.map((item) => (
               <NavLink
@@ -138,6 +157,7 @@ const Navbar = () => {
 
         <Sidebar isOpen={profileOpen} position="right" onOpen={setProfileOpen}>
             {role === "vendor" && <VendorProfilePanel />}
+            {role.role === "customer"  && <UserProfilePanel onClose={setProfileOpen} />}
         </Sidebar>
 
       {/* --- Mobile Off-Canvas Menu Content --- */}

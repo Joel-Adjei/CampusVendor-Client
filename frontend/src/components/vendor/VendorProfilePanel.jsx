@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/store/authStore';
 import React from 'react';
 import { SidebarHeader } from '../ui/Siderbar';
-import Button from '../ui/Button';
+import Button from '../ui/custom/Button';
 import { LogOut, User } from 'lucide-react';
 
 const VendorProfilePanel =({onOpen , onLogout})=>{
