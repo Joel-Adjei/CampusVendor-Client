@@ -1,6 +1,6 @@
 import React from 'react'
 import { BlurFade } from '../ui/blur-fade'
-import Button from '../ui/Button'
+import Button from '../ui/custom/Button'
 import { CheckCircle, Clock, Mail, FileText, ArrowRight } from 'lucide-react'
 import { images } from '@/assets/assets'
 import {  useNavigate } from 'react-router-dom'

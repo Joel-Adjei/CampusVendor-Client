@@ -1,6 +1,6 @@
 import { ArrowBigLeft, ArrowLeft, ArrowRight, UserCog2Icon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import Button from "../ui/Button";
+import Button from "../ui/custom/Button";
 import SetProfileName from "./SetProfileName";
 import SetProduct from "./SetProduct";
 import { useFormik } from "formik";

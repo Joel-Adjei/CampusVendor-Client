@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import Button from "../ui/Button";
+import Button from "../ui/custom/Button";
 import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
 import { images } from "@/assets/assets";

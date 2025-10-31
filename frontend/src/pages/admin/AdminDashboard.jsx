@@ -23,7 +23,7 @@ import {
   Mail,
   ShoppingBagIcon,
 } from "lucide-react";
-import Button from "../../components/ui/Button";
+import Button from "@/components/ui/custom/Button";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 

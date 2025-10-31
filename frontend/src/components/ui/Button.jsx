@@ -1,72 +1,56 @@
-import { Loader2, LoaderIcon } from "lucide-react";
-import React from "react";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva } from "class-variance-authority";
 
-const Button = ({
-  children,
-  iconSize,
-  iconStyle,
-  onClick,
-  disabled = false,
-  type,
-  isLoading = false,
-  variant = "primary",
-  iconType = "icon-left",
-  Icon,
-  className,
-}) => {
-  function getColors() {
-    switch (variant) {
-      case "primary" || "":
-        return "bg-gradient-to-br from-blue-900 to-blue-400 text-white cursor-pointer";
+import { cn } from "@/lib/utils"
 
-      case "secondary":
-        return "bg-gradient-to-br from-blue-100 to-yellow-100 text-blue-950 shadow-lg cursor-pointer";
-
-      case "outline":
-        return "bg-none border-1 border-blue-700 text-blue-700 cursor-pointer";
-
-      default:
-        return "bg-gray-400 text-gray-300 cursor-not-allowed";
-    }
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9",
+        "icon-sm": "size-8",
+        "icon-lg": "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
   }
+)
+
+function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  ...props
+}) {
+  const Comp = asChild ? Slot : "button"
 
   return (
-    <>
-      {!(iconType == "icon-only") ? (
-        <button
-          type={type}
-          disabled={disabled || isLoading}
-          onClick={onClick}
-          className={`${className} w-fit flex justify-center font-medium items-center gap-2 px-9 py-2 rounded-full 
-                        disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-300
-                        ${getColors()}`}
-        >
-          {isLoading && iconType === "icon-left" ? (
-            <Loader2 size={iconSize} className={`${iconStyle} animate-spin`} />
-          ) : (
-            iconType === "icon-left" && Icon && <Icon size={iconSize} />
-          )}
-
-          {children}
-
-          {isLoading && iconType === "icon-right" ? (
-            <Loader2 size={iconSize} className={`${iconStyle} animate-spin`} />
-          ) : (
-            iconType === "icon-right" && Icon && <Icon size={iconSize} />
-          )}
-        </button>
-      ) : (
-        <button
-          type={type}
-          disabled={disabled}
-          onClick={onClick}
-          className={`${className} size-12 cursor-pointer flex justify-center items-center  rounded-full  ${getColors()}`}
-        >
-          {Icon && <Icon size={iconSize} className={iconStyle} />}
-        </button>
-      )}
-    </>
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props} />
   );
-};
+}
 
-export default Button;
+export { Button, buttonVariants }

@@ -17,7 +17,7 @@ import {
   Download,
   RefreshCw,
 } from "lucide-react";
-import Button from "../../components/ui/Button";
+import Button from "@/components/ui/custom/Button";
 import InputField from "../../components/input/InputField";
 import { useFormik } from "formik";
 import * as Yup from "yup";

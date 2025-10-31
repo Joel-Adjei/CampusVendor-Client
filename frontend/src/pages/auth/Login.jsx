@@ -4,11 +4,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputField from "@/components/input/InputField";
 import { Loader2, LockIcon, Mail } from "lucide-react";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/custom/Button";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "react-toastify";
 import { images, videos } from "@/assets/assets";
+import axios from "@/lib/axios.js";
 
 const commonAuthSchema = {
   email: Yup.string()
@@ -23,10 +24,17 @@ const Login = () => {
   const navigate = useNavigate()
   const {updateLogin , updateVendor, admins , updateName , updateRole , vendors , users} = useAuthStore()
 
-  const handleLogIn = (values, { setSubmitting, resetForm }) => {
+  const handleLogIn = async (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
+
     try {
       const { email, password } = values;
+
+      const res = await axios.post("/auth/login", { email, password });
+      console.log("Login response:", res.data);
+
+
+
       // Check in vendors array
       const vendor = vendors.find((v => v.email === email && v.password === password));
       if (vendor) {
@@ -59,8 +67,8 @@ const Login = () => {
       // resetForm();
       
     } catch (error) {
-      toast.error("An error occurred during login. Please try again.");
-      throw new Error(error)
+      toast.error(error.response.data.message);
+      console.error(error)
     }finally {
       setSubmitting(false);
     }
