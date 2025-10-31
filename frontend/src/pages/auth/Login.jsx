@@ -30,10 +30,8 @@ const Login = () => {
     try {
       const { email, password } = values;
 
-      const res = await axios.post("/auth/login", { email, password });
-      console.log("Login response:", res.data);
-
-
+      // const res = await axios.post("/auth/login", { email, password });
+      // console.log("Login response:", res.data);
 
       // Check in vendors array
       const vendor = vendors.find((v => v.email === email && v.password === password));

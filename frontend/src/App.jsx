@@ -1,6 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import Router from "./routes";
 import React from "react";
+import './app.css'
 import {
   QueryClient,
   QueryClientProvider,

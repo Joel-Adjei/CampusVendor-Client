@@ -9,23 +9,33 @@ import {
   SelectValue,
 } from "../select";
 
-const CusSelect = ({selectValue = "Select an option" , optionsLabel , options}) => {
+const CusSelect = ({
+  selectValue = "Select an option",
+  value,
+  optionsLabel,
+  onChange,
+  options,
+}) => {
   return (
     <div>
-      <Select>
-        <SelectTrigger
-            className={"h-[90px] min-w-[150px] rounded-sm"}
-        >
-            <SelectValue placeholder={selectValue} />
+      <Select
+        value={value}
+        onValueChange={(selectedValue) => {
+          const selected = options.find((opt) => opt.value === selectedValue);
+          onChange(selected); 
+        }}
+      >
+        <SelectTrigger className={"h-[100px] w-full rounded-sm"}>
+          <SelectValue placeholder={selectValue} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{optionsLabel}</SelectLabel>
-            {
-                options.map((option)=> (
-                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                ))
-            }
+            {options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

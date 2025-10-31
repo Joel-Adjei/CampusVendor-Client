@@ -22,9 +22,13 @@ import InputField from "../../components/input/InputField";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { newVendors } from "../../lib/data";
+import CusSelect from "@/components/ui/custom/Select";
+import AddEditVendor from "@/components/admin/admin-vendor/AddEditVendor";
+import Modal from "@/components/ui/Modal";
+import { useAuthStore } from "@/store/authStore";
 
 const AdminVendors = () => {
-  const [vendors, setVendors] = useState(newVendors);
+  // const [vendors, setVendors] = useState(newVendors);
   const [filteredVendors, setFilteredVendors] = useState(newVendors);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -33,6 +37,7 @@ const AdminVendors = () => {
   const [modalType, setModalType] = useState("add"); // 'add', 'edit', 'view'
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const {vendors , signUpVendor: setVendors} = useAuthStore()
 
   // Validation schema for vendor form
   const vendorSchema = Yup.object({
@@ -133,7 +138,7 @@ const AdminVendors = () => {
         return "text-green-600 bg-green-100";
       case "Rejected":
         return "text-red-600 bg-red-100";
-      case "Pending":
+      case "pending":
         return "text-yellow-600 bg-yellow-100";
       default:
         return "text-gray-600 bg-gray-100";
@@ -146,7 +151,7 @@ const AdminVendors = () => {
         return CheckCircle;
       case "Rejected":
         return XCircle;
-      case "Pending":
+      case "pending":
         return Clock;
       default:
         return Clock;
@@ -157,15 +162,33 @@ const AdminVendors = () => {
     <div className=" bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-4">
-        <div className="px-6 bg-white py-4 flex items-center justify-between">
-            <Button Icon={RefreshCw} iconSize={18} className={"text-sm"} iconType="icon-left" variant="outline">
-              Refresh
-            </Button>
+        <div className="px-6 bg-white py-4 flex flex-col sm:flex-row gap-2 items-center justify-between">
+          <Button
+            Icon={RefreshCw}
+            iconSize={18}
+            className={"text-sm"}
+            iconType="icon-left"
+            variant="outline"
+          >
+            Refresh
+          </Button>
           <div className="flex gap-3">
-            <Button Icon={Download} iconSize={18} className={"text-sm"} iconType="icon-left" variant="secondary">
+            <Button
+              Icon={Download}
+              iconSize={17}
+              className={"text-sm"}
+              iconType="icon-left"
+              variant="secondary"
+            >
               Export
             </Button>
-            <Button Icon={Plus} iconSize={18} className={"text-sm"}  iconType="icon-left" onClick={handleAddVendor}>
+            <Button
+              Icon={Plus}
+              iconSize={18}
+              className={"text-sm"}
+              iconType="icon-left"
+              onClick={handleAddVendor}
+            >
               Add Vendor
             </Button>
           </div>
@@ -201,7 +224,7 @@ const AdminVendors = () => {
             <div>
               <p className="text-gray-600 text-sm">Pending</p>
               <p className="text-2xl font-bold text-yellow-600">
-                {vendors.filter((v) => v.status === "Pending").length}
+                {vendors.filter((v) => v.status === "pending").length}
               </p>
             </div>
             <Clock className="h-8 w-8 text-yellow-600" />
@@ -237,25 +260,30 @@ const AdminVendors = () => {
               </div>
             </div>
             <div className="flex gap-4">
-              <select
+              <CusSelect
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="All">All Status</option>
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
-              <select
+                onChange={(option) => setStatusFilter(option.value)}
+                options={[
+                  { value: "All", label: "All Status" },
+                  { value: "pending", label: "Pending" },
+                  { value: "Approved", label: "Approved" },
+                  { value: "Rejected", label: "Rejected" },
+                ]}
+                optionsLabel="Status"
+                selectValue="Select Status"
+              />
+
+              <CusSelect
                 value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="All">All Types</option>
-                <option value="vendor">Vendor</option>
-                <option value="services">Services</option>
-              </select>
+                onChange={(option) => setTypeFilter(option.value)}
+                options={[
+                  { value: "All", label: "All Types" },
+                  { value: "vendor", label: "Vendor" },
+                  { value: "services", label: "Services" },
+                ]}
+                optionsLabel="Vendor Type"
+                selectValue="Select Type"
+              />
             </div>
           </div>
         </div>
@@ -268,9 +296,6 @@ const AdminVendors = () => {
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Vendor
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Type
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
@@ -307,11 +332,6 @@ const AdminVendors = () => {
                             </div>
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
-                          {vendor.type}
-                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -352,7 +372,7 @@ const AdminVendors = () => {
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
-                          {vendor.status === "Pending" && (
+                          {vendor.status === "pending" && (
                             <div className="flex gap-1">
                               <button
                                 onClick={() =>
@@ -402,158 +422,16 @@ const AdminVendors = () => {
       </div>
 
       {/* Modal for Add/Edit/View Vendor */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {modalType === "add" && "Add New Vendor"}
-                {modalType === "edit" && "Edit Vendor"}
-                {modalType === "view" && "Vendor Details"}
-              </h3>
-            </div>
-
-            <div className="p-6">
-              {modalType === "view" ? (
-                <div className="space-y-4">
-                  <div className="text-center mb-6">
-                    <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mx-auto mb-4">
-                      <span className="text-white font-medium text-xl">
-                        {selectedVendor?.name?.charAt(0)}
-                      </span>
-                    </div>
-                    <h4 className="text-xl font-semibold">
-                      {selectedVendor?.name}
-                    </h4>
-                    <p className="text-gray-600">{selectedVendor?.email}</p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Description
-                      </label>
-                      <p className="text-gray-900 mt-1">
-                        {selectedVendor?.description}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Type
-                      </label>
-                      <p className="text-gray-900 mt-1 capitalize">
-                        {selectedVendor?.type}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Status
-                      </label>
-                      <span
-                        className={`inline-block mt-1 px-2 py-1 rounded text-sm ${getStatusColor(
-                          selectedVendor?.status
-                        )}`}
-                      >
-                        {selectedVendor?.status}
-                      </span>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700">
-                        Joined
-                      </label>
-                      <p className="text-gray-900 mt-1">
-                        {selectedVendor?.joined}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={formik.handleSubmit} className="space-y-4">
-                  <InputField
-                    label="Vendor Name"
-                    name="name"
-                    placeholder="Enter vendor name"
-                    isRequired
-                    formik={formik}
-                  />
-
-                  <InputField
-                    label="Email"
-                    name="email"
-                    type="email"
-                    placeholder="Enter email address"
-                    isRequired
-                    formik={formik}
-                  />
-
-                  <InputField
-                    label="Description"
-                    name="description"
-                    placeholder="Enter vendor description"
-                    isRequired
-                    formik={formik}
-                    as="textarea"
-                  />
-
-                  <div>
-                    <label className="block text-sm font-medium text-blue-700 mb-2">
-                      Vendor Type <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      name="type"
-                      value={formik.values.type}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      className="w-full px-6 py-2.5 border border-gray-300 rounded-full bg-gray-200/30 text-blue-900 focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
-                    >
-                      <option value="vendor">Vendor</option>
-                      <option value="services">Services</option>
-                    </select>
-                    {formik.touched.type && formik.errors.type && (
-                      <div className="text-red-500 text-xs ml-3 mt-1">
-                        {formik.errors.type}
-                      </div>
-                    )}
-                  </div>
-
-                  {modalType === "edit" && (
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-2">
-                        Status
-                      </label>
-                      <select
-                        name="status"
-                        value={formik.values.status}
-                        onChange={formik.handleChange}
-                        className="w-full px-6 py-2.5 border border-gray-300 rounded-full bg-gray-200/30 text-blue-900 focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
-                      </select>
-                    </div>
-                  )}
-                </form>
-              )}
-            </div>
-
-            <div className="px-6 py-4 border-t flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setShowModal(false)}>
-                {modalType === "view" ? "Close" : "Cancel"}
-              </Button>
-              {modalType !== "view" && (
-                <Button
-                  onClick={formik.handleSubmit}
-                  disabled={formik.isSubmitting}
-                  isLoading={formik.isSubmitting}
-                >
-                  {modalType === "add" ? "Add Vendor" : "Save Changes"}
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+        <Modal display={showModal}>
+          <AddEditVendor
+            selectedVendor={selectedVendor}
+            onCancel={() => {
+              setShowModal(false);
+              setSelectedVendor(null);
+            }}
+            modalType={modalType}
+          />
+        </Modal>
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
