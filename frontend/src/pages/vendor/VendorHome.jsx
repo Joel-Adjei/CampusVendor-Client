@@ -12,15 +12,13 @@ import {
   ArrowRight,
   MoreVertical,
 } from "lucide-react";
-import { useAuthStore } from "@/store/authStore";
+// import { useAuthStore } from "@/store/authStore";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { images } from "@/assets/assets";
 
 const VendorHome = () => {
   const navigate = useNavigate();
-  const updateLogout = useAuthStore((state) => state.updateLogout);
-  const isLogin = useAuthStore((state) => state.isLogin);
 
   // Sample data for recent messages
   const recentMessages = [
@@ -54,24 +52,13 @@ const VendorHome = () => {
     },
   ];
 
-  // Sample chart data
-  const chartData = [
-    { day: "Mon", sales: 45 },
-    { day: "Tue", sales: 52 },
-    { day: "Wed", sales: 48 },
-    { day: "Thu", sales: 68 },
-    { day: "Fri", sales: 72 },
-    { day: "Sat", sales: 60 },
-    { day: "Sun", sales: 55 },
-  ];
 
-  const maxSales = Math.max(...chartData.map((item) => item.sales));
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Welcome Banner */}
       <BlurFade direction="bottom" blur="0" delay={0.1}>
-        <div className="relative h-45 bg-gradient-to-br flex items-center from-blue-700 to-blue-400 w-full rounded-3xl p-6 mb-6 relative ">
+        <div className="relative h-45 bg-gradient-to-br flex items-center from-blue-700 to-blue-400 w-full rounded-3xl p-6 mb-6 ">
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-4">
               {/* Profile Avatar Placeholder */}

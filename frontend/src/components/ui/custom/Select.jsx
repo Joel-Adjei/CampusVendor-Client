@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../select";
+import { Filter } from "lucide-react";
 
 const CusSelect = ({
   selectValue = "Select an option",
@@ -15,6 +16,7 @@ const CusSelect = ({
   optionsLabel,
   onChange,
   options,
+  Icon,
 }) => {
   return (
     <div>
@@ -22,13 +24,14 @@ const CusSelect = ({
         value={value}
         onValueChange={(selectedValue) => {
           const selected = options.find((opt) => opt.value === selectedValue);
-          onChange(selected); 
+          onChange(selected);
         }}
       >
-        <SelectTrigger className={"h-[100px] w-full rounded-sm"}>
+        <SelectTrigger className={"bg-white w-full rounded-sm border border-gray-300 focus:border focus:ring-[#ffcb05] focus:border-[#ffcb05]"}>
+          {Icon && <Icon />}
           <SelectValue placeholder={selectValue} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className={"border border-gray-300"}>
           <SelectGroup>
             <SelectLabel>{optionsLabel}</SelectLabel>
             {options.map((option) => (

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import Button from "@/components/ui/custom/Button";
 import Modal from '@/components/ui/Modal';
+import LoadingSpinner from '@/components/ui/custom/LoadingSpinner';
 
 const VendorOrders = () => {
   const [orders, setOrders] = useState([])
@@ -116,13 +117,7 @@ const VendorOrders = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-yellow-50 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-900 to-blue-500 rounded-full animate-pulse"></div>
-          <div className="animate-bounce">
-            <Package className="w-8 h-8 mx-auto text-blue-900" />
-          </div>
-          <p className="text-blue-900 font-medium">Loading your orders...</p>
-        </div>
+        <LoadingSpinner message="Loading your orders..." themeColor="blue" />
       </div>
     )
   }
