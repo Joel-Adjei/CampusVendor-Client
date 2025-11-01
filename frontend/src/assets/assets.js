@@ -5,13 +5,15 @@ import logo from './imgs/cv-logo.png'
 import vid1 from './imgs/vid-01.mp4';
 import vid2 from './imgs/vid-02.mp4';
 import vendorIllustration from './imgs/vendor-illus.png'
+import item1 from './imgs/item-01.jpg';
 
 export const images = {
     img1,
     img2,
     img3,
     logo,
-    vendorIllustration
+    vendorIllustration,
+    item1
 };
 
 export const videos = {

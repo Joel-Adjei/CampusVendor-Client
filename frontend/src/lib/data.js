@@ -53,3 +53,11 @@ export const hallOptions = universityOfGhanaHalls.map(hall => ({
     value: hall.toLowerCase().replace(/\s+/g, '_'),
     label: hall
 }));
+
+export const categoryOptions = [
+    { value: "all", label: "All Categories" },
+    { value: "Clothing", label: "Clothing" },
+    { value: "Books", label: "Books" },
+    { value: "Accessories", label: "Accessories" },
+    { value: "Electronics", label: "Electronics" },
+  ];
