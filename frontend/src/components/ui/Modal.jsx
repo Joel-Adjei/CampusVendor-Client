@@ -18,7 +18,7 @@ const Modal =({ display , children})=>{
 
     return(
         <section className="fixed flex justify-center items-center top-0 left-0 z-50 w-full h-[100vh] bg-black/50 backdrop-blur-xs p-4">
-            <div className="custom-scrollbar bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto ">
+            <div className="custom-scrollbar bg-white rounded-2xl shadow-2xl max-w-4xl max-h-[90vh] overflow-y-auto ">
                 {children}
             </div>
         </section>

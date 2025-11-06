@@ -26,18 +26,18 @@ import CusSelect from "@/components/ui/custom/Select";
 import AddEditVendor from "@/components/admin/admin-vendor/AddEditVendor";
 import Modal from "@/components/ui/Modal";
 import { useAuthStore } from "@/store/authStore";
+import StatCard from "@/components/ui/custom/StatCard";
+import Input from "@/components/input/Input";
 
 const AdminVendors = () => {
-  // const [vendors, setVendors] = useState(newVendors);
-  const [filteredVendors, setFilteredVendors] = useState(newVendors);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [typeFilter, setTypeFilter] = useState("All");
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("add"); // 'add', 'edit', 'view'
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const {vendors , signUpVendor: setVendors} = useAuthStore()
+  const [filteredVendors, setFilteredVendors] = useState(newVendors);
 
   // Validation schema for vendor form
   const vendorSchema = Yup.object({
@@ -80,18 +80,20 @@ const AdminVendors = () => {
 
   // Filter vendors based on search and filters
   useEffect(() => {
-    let filtered = vendors.filter((vendor) => {
+    if(vendors && searchTerm == ""){
+    let filtered = newVendors.filter((vendor) => {
       const matchesSearch =
         vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vendor.email.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
         statusFilter === "All" || vendor.status === statusFilter;
-      const matchesType = typeFilter === "All" || vendor.type === typeFilter;
 
-      return matchesSearch && matchesStatus && matchesType;
+      return matchesSearch && matchesStatus;
     });
     setFilteredVendors(filtered);
-  }, [vendors, searchTerm, statusFilter, typeFilter]);
+  }
+  }, [vendors, searchTerm, statusFilter]);
+
 
   const handleAddVendor = () => {
     setModalType("add");
@@ -132,6 +134,13 @@ const AdminVendors = () => {
     );
   };
 
+  const stat = [
+    {label : "Total Vendors", Icon: Store , color: "blue", value: vendors.length},
+    {label : "Approved", Icon: CheckCircle , color: "green", value: vendors.filter((v) => v.status === "Approved").length},
+    {label : "Pending", Icon: Store , color: "yellow", value: vendors.filter((v) => v.status === "pending").length},
+    {label: "Rejected" , Icon: XCircle , color: "red", value: vendors.filter((v) => v.status === "Rejected").length}
+  ]
+
   const getStatusColor = (status) => {
     switch (status) {
       case "Approved":
@@ -162,7 +171,7 @@ const AdminVendors = () => {
     <div className=" bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-4">
-        <div className="px-6 bg-white py-4 flex flex-col sm:flex-row gap-2 items-center justify-between">
+        <div className="px-6 bg- py-4 flex flex-col sm:flex-row gap-2 items-center justify-between">
           <Button
             Icon={RefreshCw}
             iconSize={18}
@@ -197,50 +206,19 @@ const AdminVendors = () => {
 
       {/* Stats Cards */}
       <div className="px-6 grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Total Vendors</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {vendors.length}
-              </p>
-            </div>
-            <Store className="h-8 w-8 text-blue-600" />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Approved</p>
-              <p className="text-2xl font-bold text-green-600">
-                {vendors.filter((v) => v.status === "Approved").length}
-              </p>
-            </div>
-            <CheckCircle className="h-8 w-8 text-green-600" />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600">
-                {vendors.filter((v) => v.status === "pending").length}
-              </p>
-            </div>
-            <Clock className="h-8 w-8 text-yellow-600" />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Rejected</p>
-              <p className="text-2xl font-bold text-red-600">
-                {vendors.filter((v) => v.status === "Rejected").length}
-              </p>
-            </div>
-            <XCircle className="h-8 w-8 text-red-600" />
-          </div>
-        </div>
+        
+        {
+          stat.map((stat)=>(
+            <StatCard
+              Icon={stat.Icon}
+              label={stat.label}
+              value={stat.value}
+              color={stat.color}
+            />
+          ))
+        }
+      
+        
       </div>
 
       {/* Search and Filters */}
@@ -250,12 +228,12 @@ const AdminVendors = () => {
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <input
+                <Input
                   type="text"
                   placeholder="Search vendors by name or email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full bg-white pl-10 pr-4 "
                 />
               </div>
             </div>
@@ -272,43 +250,31 @@ const AdminVendors = () => {
                 optionsLabel="Status"
                 selectValue="Select Status"
               />
-
-              <CusSelect
-                value={typeFilter}
-                onChange={(option) => setTypeFilter(option.value)}
-                options={[
-                  { value: "All", label: "All Types" },
-                  { value: "vendor", label: "Vendor" },
-                  { value: "services", label: "Services" },
-                ]}
-                optionsLabel="Vendor Type"
-                selectValue="Select Type"
-              />
             </div>
           </div>
         </div>
 
         {/* Vendors Table */}
-        <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b">
+              <thead  className="bg-gradient-to-r from-blue-400 to-blue-700 text-gray-100">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider">
                     Vendor
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider">
                     Joined
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-100">
                 {filteredVendors.map((vendor, index) => {
                   const StatusIcon = getStatusIcon(vendor.status);
                   return (
@@ -435,7 +401,10 @@ const AdminVendors = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <Modal
+          display={showDeleteConfirm}
+          
+        >
           <div className="bg-white rounded-xl max-w-md w-full">
             <div className="p-6">
               <div className="flex items-center gap-4 mb-4">
@@ -469,7 +438,7 @@ const AdminVendors = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   );
