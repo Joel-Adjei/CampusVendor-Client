@@ -18,6 +18,8 @@ import {
 import Button from "@/components/ui/custom/Button";
 import Modal from '@/components/ui/Modal';
 import LoadingSpinner from '@/components/ui/custom/LoadingSpinner';
+import Input from '@/components/input/Input';
+import CusSelect from '@/components/ui/custom/Select';
 
 const VendorOrders = () => {
   const [orders, setOrders] = useState([])
@@ -128,12 +130,12 @@ const VendorOrders = () => {
         
         {/* Header with color palette integration */}
         <div className="bg-gradient-to-r from-blue-700 to-blue-400 rounded-2xl p-8 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400 rounded-full opacity-10 -translate-y-32 translate-x-32"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500 rounded-full opacity-10 translate-y-24 -translate-x-24"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full opacity-10 -translate-y-32 translate-x-32"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gray-50 rounded-full opacity-10 translate-y-24 -translate-x-24"></div>
           
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-white/20 rounded-md backdrop-blur-sm">
+            <div className="flex flex-col md:flex-row items-center gap-3 mb-4">
+              <div className="p-3 bg-white/20 rounded-md backdrop-blur-sm self-start sm:self-center">
                 <ShoppingBag className="w-8 h-8 text-brand" />
               </div>
               <div>
@@ -200,28 +202,30 @@ const VendorOrders = () => {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
+              <Input
                 type="text"
                 placeholder="Search orders by customer name or order ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+                className="w-full pl-10 pr-4 bg-white mt-0"
               />
             </div>
             
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <select
+
+              <CusSelect
+                Icon={Filter}
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-10 pr-8 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white min-w-[150px]"
-              >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="processing">Processing</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
+                onChange={option => setStatusFilter(option.value)}
+                selectValue="statusFilter"
+                options={[
+                  { value: 'all', label: 'All Status' },
+                  { value: 'pending', label: 'Pending' },
+                  { value: 'processing', label: 'Processing' },
+                  { value: 'completed', label: 'Completed' },
+                  { value: 'cancelled', label: 'Cancelled' },
+                ]}
+              />
             </div>
           </div>
         </div>

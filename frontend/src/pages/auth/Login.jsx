@@ -83,7 +83,7 @@ const Login = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col md:flex-row  bg-gradient-to-br from-blue-700 to-blue-400">
-      <section className="relative overflow-hidden h-40 md:min-h-[100vh] w-full md:bg-gradient-to-br md:from-blue-700 md:to-blue-400 md:flex-3/4">
+      <section className="relative overflow-hidden h-40 md:min-h-[100vh] w-full md:bg-gradient-to-br md:from-blue-700 md:to-blue-400 md:flex-1/2">
         {/* <div className="absolute -top-20 -right-40 border-50 border-white/20 size-100 rounded-full" /> */}
         <div className="absolute md:hidden bottom-0 -left-10  bg-gradient-to-br from-white/60 to-70% to-transparent size-70 rounded-full" />
         <img src={images.img2} className="opacity-30 absolute -top-30 md:hidden " />
@@ -108,8 +108,9 @@ const Login = () => {
             blur="0" 
             delay={0.6}
             duration={1}
+            className={"flex  justify-center  md:min-h-[100vh] px-8 sm:px-0 md:items-center"}
         >
-          <div className="w-full p-14 md:p-2 lg:px-14 mt-17 font-Montserrat">
+          <div className="w-full  mt-17 font-Montserrat">
             <div className="flex flex-col justify-center mb-6">
               <h1 className="text-4xl mx-auto w-fit font-extrabold text-center">
                 <span className="bg-gradient-to-tr from-blue-700 to-blue-400 bg-clip-text text-transparent">
@@ -119,7 +120,7 @@ const Login = () => {
                 <div className="w-17 h-1 mt-2 bg-blue-500" />
               </h1>
 
-              <p className="text-center text-sm text-gray-600 mt-3">
+              <p className="text-center text-sm text-gray-400 mt-1">
                 login to get started with Campus Vendor
               </p>
             </div>
@@ -160,7 +161,7 @@ const Login = () => {
               </div>
             </form>
 
-            <p className="text-center text-sm text-gray-600 mt-6">
+            <p className="text-center text-sm text-gray-600 mt-3">
               Don't have an account?{" "}
               <NavLink
                 to="/auth/signup"

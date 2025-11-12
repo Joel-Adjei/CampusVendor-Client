@@ -165,7 +165,7 @@ const Signup = () => {
 
   return (
     <div className="min-h-[100vh] w-full flex flex-col md:flex-row  bg-gradient-to-br from-blue-700 to-blue-400">
-      <section className="h-40 relative overflow-hidden md:min-h-[100vh] w-full md:bg-gradient-to-br md:from-blue-700 md:to-blue-400 md:flex-3/4">
+      <section className="h-40 relative overflow-hidden md:min-h-[100vh] w-full md:bg-gradient-to-br md:from-blue-700 md:to-blue-400 md:flex-1/2">
         <img
           src={images.img1}
           className="opacity-30 absolute -top-30 md:hidden "

@@ -1,10 +1,10 @@
-import { defaultAdmin } from "@/lib/data";
+import { defaultAdmin, defaultVendor } from "@/lib/data";
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
 const initialValue = {
     users: [],
-    vendors: [],
+    vendors: [defaultVendor],
     admins: [defaultAdmin],
     user: {
         email: "",

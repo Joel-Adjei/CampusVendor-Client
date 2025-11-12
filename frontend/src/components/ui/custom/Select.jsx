@@ -20,6 +20,7 @@ const CusSelect = ({
 }) => {
   return (
     <div>
+      
       <Select
         value={value}
         onValueChange={(selectedValue) => {
@@ -27,8 +28,8 @@ const CusSelect = ({
           onChange(selected);
         }}
       >
-        <SelectTrigger className={"bg-white w-full rounded-sm border border-gray-300 focus:border focus:ring-[#ffcb05] focus:border-[#ffcb05]"}>
-          {Icon && <Icon />}
+        <SelectTrigger  className={"bg-white py-5 px-2 text-gray-600 w-full rounded-lg border border-gray-300 focus:border focus:ring-[#ffcb05] focus:border-[#ffcb05]"}>
+          {Icon && <Icon className="text-gray-400" />}
           <SelectValue placeholder={selectValue} />
         </SelectTrigger>
         <SelectContent className={"border border-gray-300"}>

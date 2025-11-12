@@ -8,11 +8,24 @@ export const defaultAdmin = {
     role: "admin",
 };
 
+export const defaultVendor = {
+    businessName: "Legan Thrift",
+    category: "",
+    confirmPassword: "12345678",
+    description: "hii",
+    email: "joeladjei01@gmail.com",
+    location: "Legon Hall",
+    name: "Joel Adjei",
+    passwor: "12345678",
+    phoneNumber: "0234345678",
+    role: "Vendor",
+}
+
 export const newVendors = [
-    {name: "Vendor One", email: "trial@gmail.com", description: "Best vendor in town." , status: "Pending", joined: "30 mins ago" , type: "vendor"},
-    {name: "Vendor Two", email: "trial@gmail.com", description: "Quality products." , status: "Pending", joined: "5 hours ago" , type: "services"},
-    {name: "Vendor Three", email: "trial@gmail.com", description: "Affordable prices." , status: "Pending", joined: "1 day ago" , type: "vendor"},
-    {name: "Vendor Four", email: "trial@gmail.com", description: "Fast delivery." , status: "Pending", joined: "2 days ago" , type: "services"},
+    { name: "Vendor One", email: "trial@gmail.com", description: "Best vendor in town.", status: "Pending", joined: "30 mins ago", type: "vendor" },
+    { name: "Vendor Two", email: "trial@gmail.com", description: "Quality products.", status: "Pending", joined: "5 hours ago", type: "services" },
+    { name: "Vendor Three", email: "trial@gmail.com", description: "Affordable prices.", status: "Pending", joined: "1 day ago", type: "vendor" },
+    { name: "Vendor Four", email: "trial@gmail.com", description: "Fast delivery.", status: "Pending", joined: "2 days ago", type: "services" },
 ];
 
 export const universityOfGhanaHalls = [
@@ -60,4 +73,4 @@ export const categoryOptions = [
     { value: "Books", label: "Books" },
     { value: "Accessories", label: "Accessories" },
     { value: "Electronics", label: "Electronics" },
-  ];
+];

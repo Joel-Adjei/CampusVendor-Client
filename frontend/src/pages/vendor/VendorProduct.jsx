@@ -22,8 +22,10 @@ import LoadingSpinner from "@/components/ui/custom/LoadingSpinner";
 import Input from "@/components/input/Input";
 import AddProduct from "./AddProduct";
 import { images } from "@/assets/assets";
+import useVendorProductStore from "@/store/useVendorProductStore";
 
 const VendorProduct = () => {
+  const setEditProduct = useVendorProductStore(state => state.setEditProduct)
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,11 +51,9 @@ const VendorProduct = () => {
         "Official university branded t-shirt made from premium cotton",
       price: 25.0,
       category: "Clothing",
-      stock: 50,
-      sold: 15,
       rating: 4.5,
       image: images.item1,
-      status: "active",
+      availabilty: true,
     },
     {
       id: "PRD-002",
@@ -61,11 +61,9 @@ const VendorProduct = () => {
       description: "Comprehensive study guide for advanced mathematics courses",
       price: 35.0,
       category: "Books",
-      stock: 20,
-      sold: 8,
-      rating: 4.8,
+      rating: 4.5,
       image: images.item1,
-      status: "active",
+      availabilty: false,
     },
     {
       id: "PRD-003",
@@ -73,11 +71,9 @@ const VendorProduct = () => {
       description: "Warm and comfortable hoodie perfect for campus life",
       price: 45.0,
       category: "Clothing",
-      stock: 30,
-      sold: 22,
       rating: 4.3,
       image: images.item1,
-      status: "active",
+      availabilty: true,
     },
     {
       id: "PRD-004",
@@ -85,11 +81,9 @@ const VendorProduct = () => {
       description: "Ergonomic laptop stand for better study posture",
       price: 28.0,
       category: "Accessories",
-      stock: 0,
-      sold: 12,
       rating: 4.6,
       image: images.item1,
-      status: "out_of_stock",
+      availabilty: true,
     },
     {
       id: "PRD-005",
@@ -97,11 +91,9 @@ const VendorProduct = () => {
       description: "Insulated water bottle with university logo",
       price: 15.0,
       category: "Accessories",
-      stock: 75,
-      sold: 35,
       rating: 4.2,
       image: images.item1,
-      status: "active",
+      availabilty: true,
     },
   ];
 
@@ -138,20 +130,16 @@ const VendorProduct = () => {
     setFilteredProducts(filtered);
   }, [searchTerm, categoryFilter, products]);
 
-  const getStatusColor = (status, stock = 0) => {
-    if (stock === 0 || status === "out_of_stock") {
+  const getStatusColor = (status) => {
+    if (status === false) {
       return "bg-gradient-to-r from-red-500 to-red-600 text-white";
-    }
-    if (stock <= 10) {
-      return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white";
     }
     return "bg-gradient-to-r from-green-500 to-green-600 text-white";
   };
 
-  const getStatusText = (status, stock = 0) => {
-    if (stock === 0 || status === "out_of_stock") return "Out of Stock";
-    if (stock <= 10) return "Low Stock";
-    return "In Stock";
+  const getStatusText = (status) => {
+    if (status) return "In Stock";
+    return "Out of Stock";
   };
 
   const handleAddProduct = (values) => {
@@ -335,11 +323,10 @@ const VendorProduct = () => {
                 </div>
                 <div
                   className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                    product.status,
-                    product.stock
+                    product.availabilty,
                   )}`}
                 >
-                  {getStatusText(product.status, product.stock)}
+                  {getStatusText(product.availabilty)}
                 </div>
               </div>
 
@@ -394,7 +381,10 @@ const VendorProduct = () => {
                     View
                   </Button>
                   <Button
-                    onClick={() => {}}
+                    onClick={() => {
+                      setEditProduct(product)
+                      setShowAddModal(true)
+                    }}
                     variant="outline"
                     iconType="icon-only"
                     Icon={Edit}
@@ -409,35 +399,36 @@ const VendorProduct = () => {
 
         {/* Add Product Modal */}
         {showAddModal && (
-          <Modal display={true}>
+          <Modal
+            display={true}
+            title={"Add New Product"}
+            subTitle={"Create a new product for your catalog"}
+            Icon={Package2}
+            onClose={() => {
+              setShowAddModal(false)
+              setEditProduct(null)
+            }}
+          >
             <AddProduct
               handleAddProduct={handleAddProduct}
-              setShowAddModal={setShowAddModal}
+              onCancel={() => {
+                setShowAddModal(false)
+                setEditProduct(null)
+              }}
+
             />
           </Modal>
         )}
 
         {/* Product Detail Modal */}
         {selectedProduct && (
-          <Modal display={true}>
-            <div className="bg-gradient-to-r from-blue-900 to-blue-600 text-white p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Package2 className="w-6 h-6" />
-                  <div>
-                    <h2 className="text-xl font-bold">Product Details</h2>
-                    <p className="text-blue-100">{selectedProduct.id}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedProduct(null)}
-                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                >
-                  <Package2 className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-
+          <Modal 
+            display={true}
+            title={"Product Details"}
+            subTitle={selectedProduct.id}
+            Icon={Package2}
+            onClose={() => setSelectedProduct(null)}
+          >
             <div className="p-6 space-y-6">
               <div className="flex flex-col items-center md:flex-row gap-6">
                 <div className="w-48 h-48 bg-gradient-to-br from-blue-100 to-yellow-100 rounded-xl flex items-center justify-center">

@@ -1,98 +1,129 @@
 import FileSelect from "@/components/input/FileSelect";
 import InputField from "@/components/input/InputField";
 import Button from "@/components/ui/custom/Button";
+import Label from "@/components/ui/custom/Label";
 import CusSelect from "@/components/ui/custom/Select";
 import { categoryOptions } from "@/lib/data";
 import { useFormik } from "formik";
-import { Package2, Plus } from "lucide-react";
+import * as Yup from "yup";
+import { DollarSign, Package2, PenLineIcon, Plus, Type } from "lucide-react";
 import React from "react";
+import { FaCartArrowDown } from "react-icons/fa";
+import { toast } from "react-toastify";
+import Switch from "@/components/ui/custom/Switch";
+import useVendorProductStore from "@/store/useVendorProductStore";
 
-const AddProduct = ({ handleAddProduct, setShowAddModal }) => {
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Product name is required"),
+  price: Yup.number("Price must be a number")
+    .required("Price is required")
+    .positive("Price must be positive"),
+  description: Yup.string().required("Description is required"),
+  category: Yup.string().required("Category is required"),
+  type: Yup.string().required("Type is required"),
+  state: Yup.string(),
+  availability: Yup.boolean().required("Avability is Required"),
+  image: Yup.mixed().required("Product image is required"),
+});
+
+const AddProduct = ({ handleAddProduct, onCancel }) => {
+  const {editProduct , setEditProduct} = useVendorProductStore();
+
   const formik = useFormik({
     initialValues: {
-      name: "",
-      price: "",
-      description: "",
-      category: "",
-      stock: "",
+      name: editProduct? editProduct.name :  "",
+      price: editProduct? editProduct.price : "",
+      description: editProduct? editProduct.description : "",
+      category: editProduct? editProduct.category : "",
+      type:  editProduct?.type ? editProduct.type :"",
+      state: editProduct?.state ? editProduct.state : "",
+      availability:editProduct?.availability ? editProduct.availability : false,
       image: null,
     },
-    onSubmit: (values) => {
+    validationSchema,
+    onSubmit: (values , {setSubmitting}) => {
+      setSubmitting(true);
       console.log(values);
+      if(values.type === "Product" && !values.state){
+        toast.info("Please select the product state.");
+        setSubmitting(false);
+        return;
+      }
       handleAddProduct(values);
+      setSubmitting(false);
     },
   });
 
   return (
     <div>
-      <div className="bg-gradient-to-r from-blue-900 to-blue-600 text-white p-6 rounded-t-2xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Plus className="w-6 h-6" />
-            <div>
-              <h2 className="text-xl font-bold">Add New Product</h2>
-              <p className="text-blue-100">
-                Create a new product for your catalog
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setShowAddModal(false)}
-            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-          >
-            <Package2 className="w-6 h-6" />
-          </button>
-        </div>
-      </div>
-
-      <div className="p-6 space-y-4">
+      <form className="px-6 space-y-6" onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Product Name
-            </label>
             <InputField
+              label={"Product Name"}
+              Icon={Package2}
               name={"name"}
               type="text"
               value={formik.values.name}
               formik={formik}
+              isRequired
               placeholder="Enter product name"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Price ($)
-            </label>
             <InputField
+              label={"Price (GH₵)"}
+              Icon={DollarSign}
               name={"price"}
-              type="number"
               value={formik.values.price}
               formik={formik}
               placeholder="0.00"
+              isRequired
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Description
-          </label>
           <InputField
+            label={"Description"}
+            Icon={PenLineIcon}
             name={"description"}
             as="textarea"
             value={formik.values.description}
             formik={formik}
             rows="3"
+            isRequired
             placeholder="Enter product description"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category
-            </label>
+            <Label label="Type" htmlFor="type" Icon={Type} isRequired />
+            <CusSelect
+              selectValue="Select Type"
+              value={formik.values.type}
+              optionsLabel="Types"
+              onChange={(selected) =>
+                formik.setFieldValue("type", selected.value)
+              }
+              options={[
+                { label: "Product", value: "Product" },
+                { label: "Service", value: "Service" },
+              ]}
+            />
+            {
+              formik.touched.type && formik.errors.type && (
+                <div className="text-red-500 text-xs ml-3 mt-1">
+                  {formik.errors.type}
+                </div>
+              )
+            }
+          </div>
+
+          <div>
+            <Label label="Category" htmlFor="category" Icon={FaCartArrowDown} isRequired />
             <CusSelect
               selectValue="Select Category"
               value={formik.values.category}
@@ -102,43 +133,81 @@ const AddProduct = ({ handleAddProduct, setShowAddModal }) => {
               }
               options={categoryOptions.filter((opt) => opt.value !== "all")}
             />
+            {
+              formik.touched.category && formik.errors.category && (
+                <div className="text-red-500 text-xs ml-3 mt-1">
+                  {formik.errors.category}
+                </div>
+              )
+            }
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Stock Quantity
-            </label>
-            <InputField
-              name={"stock"}
-              type="number"
-              value={formik.values.stock}
-              formik={formik}
-              placeholder="0"
-            />
-          </div>
+          {formik.values.type === "Product" && (
+            <div>
+              <CusSelect
+                value={formik.values.state}
+                selectValue="Select State"
+                optionsLabel="State"
+                onChange={(selected) =>
+                  formik.setFieldValue("state", selected.value)
+                }
+                options={[
+                  { label: "New", value: "new" },
+                  { label: "Used", value: "used" },
+                ]}
+              />
+              {
+                formik.touched.state && formik.errors.state && (
+                  <div className="text-red-500 text-xs ml-3 mt-1">
+                    {formik.errors.state}
+                  </div>
+                )
+              }
+            </div>
+          )}
         </div>
 
         <div>
-            <FileSelect
+          <FileSelect
+            isRequired
             onFilesChange={(files) => formik.setFieldValue("image", files[0])}
             label="Upload Product Images"
             acceptedTypes="image/*,.pdf"
             maxFiles={1}
             maxSizeMB={5}
-            
           />
+
+          {formik.touched.image && formik.errors.image && (
+            <div className="text-red-500 text-xs ml-3 mt-1">
+              {formik.errors.image}
             </div>
+          )}
+        </div>
+
+        <div>
+          <Switch
+            id="availability"
+            description={formik.values.availability ? "Available" : "Unavailable"}
+            label="Product Availability"
+            checked={formik.values.availability}
+            onChange={(checked) => {
+              formik.setFieldValue("availability", checked)
+            }}
+            size="small"
+          />
+        </div>
 
         <div className="flex gap-3 pt-4 border-t">
           <Button
-            onClick={() => setShowAddModal(false)}
+            type="button"
+            onClick={() => onCancel()}
             variant="outline"
             className="flex-1"
           >
             Cancel
           </Button>
           <Button
-            onClick={formik.handleSubmit}
+            type={"submit"}
             variant="primary"
             iconType="icon-left"
             Icon={Plus}
@@ -149,7 +218,7 @@ const AddProduct = ({ handleAddProduct, setShowAddModal }) => {
             Add
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
