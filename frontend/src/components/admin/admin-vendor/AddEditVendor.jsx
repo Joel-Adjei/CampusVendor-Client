@@ -37,8 +37,8 @@ const AddEditVendor = ({selectedVendor , onCancel , modalType}) => {
 
   return (
     <div>
-      <div>
-        <div className="h-full overflow-y-auto">
+      <div className="max-w-190">
+        <div className="h-full w-full overflow-y-auto">
           <div className="px-6 py-4 border-b">
             <h3 className="text-lg font-semibold text-gray-900">
               {modalType === "add" && "Add New Vendor"}

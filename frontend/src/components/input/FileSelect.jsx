@@ -12,6 +12,7 @@ import {
   Check,
   Plus
 } from 'lucide-react'
+import Label from '../ui/custom/Label'
 
 const FileSelect = ({ 
   onFilesChange, 
@@ -19,6 +20,7 @@ const FileSelect = ({
   maxFiles = 5,
   maxSizeMB = 10,
   className = "",
+  isRequired = false,
   label = "Select Files"
 }) => {
   const [selectedFiles, setSelectedFiles] = useState([])
@@ -105,9 +107,13 @@ const FileSelect = ({
         
         if (!isDuplicate) {
           const fileWithId = {
-            ...file,
             id: Math.random().toString(36).substr(2, 9),
-            preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified,
+            file: file, // Keep reference to original file
+            preview: file.type && file.type.startsWith('image/') ? URL.createObjectURL(file) : null
           }
           validFiles.push(fileWithId)
         } else {
@@ -182,9 +188,12 @@ const FileSelect = ({
     <div className={`w-full ${className}`}>
       {/* Label */}
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          {label}
-        </label>
+        <Label
+          label={label}
+          htmlFor="file-select"
+          Icon={Upload}
+          isRequired={isRequired}
+        />
       )}
 
       {/* File Drop Zone */}
@@ -201,10 +210,7 @@ const FileSelect = ({
         onDrop={handleDrop}
         onClick={openFileDialog}
       >
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400 rounded-full opacity-5 -translate-y-16 translate-x-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500 rounded-full opacity-5 translate-y-12 -translate-x-12"></div>
-
+  
         <div className="relative z-10">
           {selectedFiles.length === 0 ? (
             <div className="space-y-4">
