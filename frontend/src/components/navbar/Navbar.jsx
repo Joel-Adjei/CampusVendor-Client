@@ -45,13 +45,13 @@ const Navbar = () => {
   const primaryBlue = "rgb(37, 99, 235)"; // Tailwind blue-600 equivalent
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-white w-full shadow-lg fixed top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-15">
           {/* Logo/Brand Name */}
           <div className="flex font-Montserrat items-center flex-row-reverse gap-2 flex-shrink-0">
             <Search 
-              className="sm:hidden left-3 top-2.5 w-5 h-5 text-gray-400" 
+              className="lg:hidden left-3 top-2.5 w-5 h-5 text-gray-400" 
               onClick={()=> navigate("/search")}
             />
             
@@ -77,7 +77,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden sm:block">
+          <div className="hidden xl:block">
             <div className="relative flex items-center">
               <Search className="sm:absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
               <input
