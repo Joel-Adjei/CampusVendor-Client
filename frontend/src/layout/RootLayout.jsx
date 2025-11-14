@@ -16,8 +16,9 @@ const RootLayout =()=>{
             <div>
                 <Navbar />
             </div>
-
+        <div className="pt-15">
             <Outlet />
+        </div>
         </div>
     )
 }
