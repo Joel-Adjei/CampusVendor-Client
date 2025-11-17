@@ -10,6 +10,8 @@ import iphone from "./imgs/iphone.png"
 import sneaker from "./imgs/Sneaker.png"
 import cosmetics from "./imgs/cusmetics.png"
 import shoe from "./imgs/Jordan Wallpaper Air Jordan 1 Black Grey.jpg"
+import titleCart from "./icons/title-cart.png"
+import line_01 from "./icons/line-01.png"
 
 
 export const images = {
@@ -24,6 +26,14 @@ export const images = {
     cosmetics,
     shoe
 };
+
+export const icons = {
+    titleCart
+}
+
+export const objects = {
+    line_01
+}
 
 export const videos = {
     vid1,

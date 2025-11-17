@@ -37,7 +37,7 @@ const Button = ({
           type={type}
           disabled={disabled || isLoading}
           onClick={onClick}
-          className={`${className} w-fit flex justify-center font-medium items-center gap-2 px-9 py-2 rounded-full 
+          className={`${className} w-fit flex justify-center text-xs md:text-sm font-medium items-center gap-2 px-9 py-2 rounded-full 
                         disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-300
                         ${getColors()}`}
         >
