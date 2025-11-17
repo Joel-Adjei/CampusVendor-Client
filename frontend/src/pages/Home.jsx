@@ -9,6 +9,7 @@ import Button from "@/components/ui/custom/Button";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { FaCartPlus, FaShoppingBasket, FaStore } from "react-icons/fa";
 import { images } from "@/assets/assets";
+import Title from "@/components/ui/custom/Title";
 
 const Home = () => {
   const { data } = useQuery({
@@ -40,7 +41,7 @@ const Home = () => {
   return (
     <div>
       <section className="h-60 md:h-100 w-full bg-gray-600">
-      <CusCarousel data={data}>
+        <CusCarousel data={data}>
           {data?.map((item) => (
             <CarouselItem key={item.id}>
               <div className="h-60 md:h-100 w-full relative flex-shrink-0">
@@ -70,10 +71,8 @@ const Home = () => {
 
       <BlurFade>
         <section className="my-12 px-4 md:px-8 lg:px-16">
-          <h2 className="text-lg md:text-2xl font-semibold mb-6 text-center text-blue-900 font-Montserrat">
-            <FaStore className="inline-block mr-2 text-lg md:text-2xl text-amber-400 mb-1" />
-            Categories
-          </h2>
+          <Title title={"Categories"} />
+
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 gap-y-6">
             {categories?.map((category) => (
               <div
@@ -96,10 +95,7 @@ const Home = () => {
         </section>
       </BlurFade>
 
-      <BlurFade
-        inView
-        blur="0"
-      >
+      <BlurFade inView blur="0">
         <section className="h-50 sm:70 lg:h-95 w-full grid grid-cols-4 gap-2 bg-slate-100/50 py-4 px-4 md:px-8 lg:px-16">
           <div className="relative bg-gradient-to-br from-blue-800 to-blue-500 rounded-lg row-span-2 col-span-3 overflow-hidden">
             <div className="h-240 w-60 bg-white absolute -rotate-45 -top-76 -right-80 md:-right-50 " />
@@ -129,11 +125,8 @@ const Home = () => {
             </div>
           </div>
           <div className="bg-black rounded-lg overflow-hidden">
-          <div className="w-full h-full flex items-center justify-center ">
-              <img
-                src={images.shoe}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-full h-full flex items-center justify-center ">
+              <img src={images.shoe} className="w-full h-full object-cover" />
             </div>
           </div>
         </section>
