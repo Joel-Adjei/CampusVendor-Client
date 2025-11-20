@@ -20,10 +20,9 @@ const Navbar = () => {
   const role = useAuthStore((state)=> state.role)
 
   const navItems = [
+    { name: "Product", href: "#" , icon: ShoppingBasket},
     { name: "Home", href: "#home" , icon: Home},
     { name: "About Us", href: "#how-it-works", icon: Info },
-    { name: "Contacts", href: "#why-us", icon: Phone },
-    { name: "Items", href: "#" , icon: ShoppingBasket}
   ];
 
   const handleNavigate = (type)=>{
@@ -41,8 +40,6 @@ const Navbar = () => {
     setIsOpen(false)
     navigate("/", { replace: true });
   }
-
-  const primaryBlue = "rgb(37, 99, 235)"; // Tailwind blue-600 equivalent
 
   return (
     <nav className="bg-white w-full shadow-lg fixed top-0 z-50">

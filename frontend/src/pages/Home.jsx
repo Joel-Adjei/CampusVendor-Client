@@ -7,10 +7,16 @@ import CusCarousel from "@/components/ui/custom/Carousel";
 import { shortenText } from "@/lib/utils";
 import Button from "@/components/ui/custom/Button";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { FaCartPlus, FaShoppingBasket, FaShoppingCart, FaStore } from "react-icons/fa";
+import {
+  FaCartPlus,
+  FaShoppingBasket,
+  FaShoppingCart,
+  FaStore,
+} from "react-icons/fa";
 import { images } from "@/assets/assets";
 import Title from "@/components/ui/custom/Title";
 import Hero from "@/components/home/Hero";
+import ProductCard from "@/components/ui/ProductCard";
 
 const Home = () => {
   const { data } = useQuery({
@@ -48,7 +54,7 @@ const Home = () => {
       <BlurFade>
         <section className="my-12 px-4 md:px-8 lg:px-16">
           <div className="mb-4">
-          <Title title={"Categories"} />
+            <Title title={"Categories"} />
           </div>
 
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 gap-y-6">
@@ -73,36 +79,36 @@ const Home = () => {
         </section>
       </BlurFade>
 
-      <section className="relative h-60 md:h-100 w-full bg-transparent p-4 mb-7">
+      <section className="relative h-45 md:h-95 w-full bg-transparent mb-7">
         <CusCarousel data={data}>
           {data?.map((item) => (
-            <CarouselItem key={item.id} className={"basis-1/2"}>
-              <div className="h-60 md:h-100 w-full relative flex-shrink-0 rounded-2xl overflow-hidden">
-                <img
-                  src={item.images[0]}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
-                />
-                <div className=" h-1/2 w-full bg-gradient-to-t from-gray-800 to-gray-200/0 absolute bottom-0" />
-                <div className="absolute bottom-4 left-2 md:left-4 px-3 py-1 rounded">
-                  <h3 className="text-gray-100 font-semibold font-Montserrat text-xl sm:text-2xl md:text-4xl">
-                    {item.title}
-                  </h3>
+            <CarouselItem key={item.id} className={"md:basis-[70%] "}>
+              <div className="px-4 md:px-0">
+                <div className="h-45 md:h-95 w-full relative flex-shrink-0 rounded-2xl overflow-hidden">
+                  <img
+                    src={item.images[0]}
+                    alt={item.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className=" h-1/2 w-full bg-gradient-to-t from-gray-800 to-gray-200/0 absolute bottom-0" />
+                  <div className="absolute bottom-4 left-2 md:left-4 px-3 py-1 rounded">
+                    <h3 className="text-gray-100 font-semibold font-Montserrat text-xl line-clamp-1 sm:text-2xl md:text-4xl">
+                      {item.title}
+                    </h3>
 
-                  <p className="text-gray-200 text-xs md:text-sm">
-                    {shortenText(item.description, 70)}
-                  </p>
-                  <Button variant={"secondary"} className="mt-3 w-fit px-1">
-                    View Details
-                  </Button>
+                    <p className="text-gray-200 text-xs md:text-sm line-clamp-2">
+                      {item.description}
+                    </p>
+                    <Button variant={"secondary"} className="mt-3 w-fit px-1">
+                      View Details
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CarouselItem>
           ))}
         </CusCarousel>
       </section>
-
-      
 
       <BlurFade inView blur="0">
         <section className="h-50 sm:70 lg:h-95 w-full grid grid-cols-4 gap-2 bg-slate-100/50 py-4 px-4 md:px-8 lg:px-16">
@@ -112,13 +118,18 @@ const Home = () => {
             <div className="relative h-full font-Montserrat">
               <div className="h-full flex justify-center items-center z-10 px-4">
                 <div className="w-1/2">
-                  <h3 className=" text-xl md:text-6xl font-Delirium text-white">
+                  <h3 className=" text-lg md:text-3xl leading-4 font-semibold font-Montserrat text-white">
                     Phones and accessories
                   </h3>
                   {/* <p className="text-gray-200 text-xs md:text-lg">
                     Get access to the latest smartphones and accessories
                   </p> */}
-                  <Button variant={"secondary"} Icon={FaShoppingCart} iconType="icon-right" className="mt-4 text-md">
+                  <Button
+                    variant={"secondary"}
+                    Icon={FaShoppingCart}
+                    iconType="icon-right"
+                    className="mt-4 text-md"
+                  >
                     Shop
                   </Button>
                 </div>
@@ -146,6 +157,29 @@ const Home = () => {
           </div>
         </section>
       </BlurFade>
+
+      <section className="px-4 py-3 lg:px-16 md:px-8 mb-12">
+        <div className="mb-4">
+          <Title title={"Featured Products"} />
+        </div>
+        <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+          {data?.map((product) => (
+            <CarouselItem
+              key={product.id}
+              className={"basis-1/2 md:basis-1/4 "}
+            >
+              <ProductCard
+               product={product} 
+               image={product.images[0]}
+               title={product.title}
+               description={product.description}
+               price={product.price}
+               category={product.category?.name}
+              />
+            </CarouselItem>
+          ))}
+        </CusCarousel>
+      </section>
     </div>
   );
 };

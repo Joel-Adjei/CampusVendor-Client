@@ -48,7 +48,10 @@ const HeroSection1 = () => {
       </BlurFade>
       <div className={``}>
         <BlurFade direction="bottom" duration={0.6} delay={0.3}>
-          <img src={images.sneaker} className=" md:size-110 object-contain " />
+          <img
+            src={images.sneaker}
+            className="size-70 md:size-110 object-contain "
+          />
         </BlurFade>
       </div>
       <Button className={"flex md:hidden text-md z-20"} variant="primary">
@@ -63,12 +66,13 @@ const HeroSection2 = () => {
     <div className="h-full flex flex-col justify-center md:flex-row md:justify-between gap-6 bg-slate-50">
       <BlurFade direction="right" duration={0.5} inView>
         <div className="w-full h-full flex flex-col items-center gap-2 px-6 pt-9 md:items-start md:justify-center lg:pl-42">
-          <h3 className=" font-Delirium font-light text-9xl md:text-[120px] text-blue-300 leading-12 text-center md:text-left">
+          <h3 className=" font-Delirium font-light text-8xl md:text-[120px] text-blue-300 leading-13 text-center md:text-left">
             Shop Faster <br />{" "}
-            <span className="font-Montserrat text-4xl font-bold leading-none text-gray-500">
-              On Campus
-            </span>
           </h3>
+
+          <h4 className="font-Montserrat text-4xl font-bold leading-none text-gray-500">
+            On Campus
+          </h4>
           <p className="text-center leading-4 md:text-left">
             Discover exclusive deals and offers from campus vendors.
           </p>
@@ -89,7 +93,7 @@ const HeroSection2 = () => {
           <img
             src={heroImages.heroImg2}
             alt="Hero Image"
-            className="object-contain h-full"
+            className="object-contain h md:h-full"
           />
         </div>
       </BlurFade>
