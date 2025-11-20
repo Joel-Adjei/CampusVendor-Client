@@ -7,9 +7,10 @@ import CusCarousel from "@/components/ui/custom/Carousel";
 import { shortenText } from "@/lib/utils";
 import Button from "@/components/ui/custom/Button";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { FaCartPlus, FaShoppingBasket, FaStore } from "react-icons/fa";
+import { FaCartPlus, FaShoppingBasket, FaShoppingCart, FaStore } from "react-icons/fa";
 import { images } from "@/assets/assets";
 import Title from "@/components/ui/custom/Title";
+import Hero from "@/components/home/Hero";
 
 const Home = () => {
   const { data } = useQuery({
@@ -19,7 +20,7 @@ const Home = () => {
         const response = await axios.get("/products?limit=6&offset=0");
         return response.data;
       } catch (error) {
-        toast.error("Failed to fetch products");
+        // toast.error("Failed to fetch products");
         console.log("Error fetching products:", error);
       }
     },
@@ -32,7 +33,7 @@ const Home = () => {
         const response = await axios.get("/categories?limit=6");
         return response.data;
       } catch (error) {
-        toast.error("Failed to fetch categories");
+        // toast.error("Failed to fetch categories");
         console.log("Error fetching categories:", error);
       }
     },
@@ -40,38 +41,15 @@ const Home = () => {
 
   return (
     <div>
-      <section className="h-60 md:h-100 w-full bg-gray-600">
-        <CusCarousel data={data}>
-          {data?.map((item) => (
-            <CarouselItem key={item.id}>
-              <div className="h-60 md:h-100 w-full relative flex-shrink-0">
-                <img
-                  src={item.images[0]}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
-                />
-                <div className=" h-1/2 w-full bg-gradient-to-t from-gray-800 to-gray-200/0 absolute bottom-0" />
-                <div className="absolute bottom-4 left-2 md:left-4 px-3 py-1 rounded">
-                  <h3 className="text-gray-100 font-semibold font-Montserrat text-xl sm:text-2xl md:text-4xl">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-gray-200 text-xs md:text-sm">
-                    {shortenText(item.description, 70)}
-                  </p>
-                  <Button variant={"secondary"} className="mt-3">
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CusCarousel>
-      </section>
+      <div>
+        <Hero />
+      </div>
 
       <BlurFade>
         <section className="my-12 px-4 md:px-8 lg:px-16">
+          <div className="mb-4">
           <Title title={"Categories"} />
+          </div>
 
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 gap-y-6">
             {categories?.map((category) => (
@@ -95,22 +73,59 @@ const Home = () => {
         </section>
       </BlurFade>
 
+      <section className="relative h-60 md:h-100 w-full bg-transparent p-4 mb-7">
+        <CusCarousel data={data}>
+          {data?.map((item) => (
+            <CarouselItem key={item.id} className={"basis-1/2"}>
+              <div className="h-60 md:h-100 w-full relative flex-shrink-0 rounded-2xl overflow-hidden">
+                <img
+                  src={item.images[0]}
+                  alt={item.title}
+                  className="h-full w-full object-cover"
+                />
+                <div className=" h-1/2 w-full bg-gradient-to-t from-gray-800 to-gray-200/0 absolute bottom-0" />
+                <div className="absolute bottom-4 left-2 md:left-4 px-3 py-1 rounded">
+                  <h3 className="text-gray-100 font-semibold font-Montserrat text-xl sm:text-2xl md:text-4xl">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-gray-200 text-xs md:text-sm">
+                    {shortenText(item.description, 70)}
+                  </p>
+                  <Button variant={"secondary"} className="mt-3 w-fit px-1">
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            </CarouselItem>
+          ))}
+        </CusCarousel>
+      </section>
+
+      
+
       <BlurFade inView blur="0">
         <section className="h-50 sm:70 lg:h-95 w-full grid grid-cols-4 gap-2 bg-slate-100/50 py-4 px-4 md:px-8 lg:px-16">
           <div className="relative bg-gradient-to-br from-blue-800 to-blue-500 rounded-lg row-span-2 col-span-3 overflow-hidden">
             <div className="h-240 w-60 bg-white absolute -rotate-45 -top-76 -right-80 md:-right-50 " />
 
             <div className="relative h-full font-Montserrat">
-              <div className=" flex justify-center items-center z-10 px-4">
-                <div>
-                  <h3 className=" text-xl md:text-3xl font-bold text-white">
+              <div className="h-full flex justify-center items-center z-10 px-4">
+                <div className="w-1/2">
+                  <h3 className=" text-xl md:text-6xl font-Delirium text-white">
                     Phones and accessories
                   </h3>
+                  {/* <p className="text-gray-200 text-xs md:text-lg">
+                    Get access to the latest smartphones and accessories
+                  </p> */}
+                  <Button variant={"secondary"} Icon={FaShoppingCart} iconType="icon-right" className="mt-4 text-md">
+                    Shop
+                  </Button>
                 </div>
-                <div className="h-38 md:h-90">
+                <div className="">
                   <img
                     src={images.iphone}
-                    className="h-full w-120 md:w-full object-cover z-10"
+                    className=" w-30 md:w-75 object-contain z-10"
                   />
                 </div>
               </div>
