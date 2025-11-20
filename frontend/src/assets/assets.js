@@ -12,6 +12,7 @@ import cosmetics from "./imgs/cusmetics.png"
 import shoe from "./imgs/Jordan Wallpaper Air Jordan 1 Black Grey.jpg"
 import titleCart from "./icons/title-cart.png"
 import line_01 from "./icons/line-01.png"
+import heroImg2 from "./imgs/woman-holding-shopping-bags.png"
 
 
 export const images = {
@@ -26,6 +27,10 @@ export const images = {
     cosmetics,
     shoe
 };
+
+export const heroImages = {
+    heroImg2
+}
 
 export const icons = {
     titleCart
