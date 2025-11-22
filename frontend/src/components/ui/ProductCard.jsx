@@ -16,11 +16,9 @@ import Button from "./custom/Button";
 const ProductCard = ({
 //   id,
   product = {},
-  description,
   price,
   image,
   title,
-  category,
   onAddToCart,
   onViewDetails,
   onToggleFavorite,
@@ -86,7 +84,7 @@ const ProductCard = ({
     <div
       className={`
         ${getVariantStyles()}
-        font-Montserrat
+        font-Montserrat h-full
         rounded-2xl shadow-lg hover:shadow-xl 
         transition-all duration-500 ease-out 
         transform hover:-translate-y-2 hover:scale-[1.02]
@@ -175,26 +173,21 @@ const ProductCard = ({
           </p> */}
         </div>
 
-        {/* Description */}
-        <p className="text-gray-500 text-xs line-clamp-1">
-          {description || "Product description goes here..."}
-        </p>
-
         {/* Rating and Reviews */}
-        {/* <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex gap-0.5">{getRatingStars(product.rating)}</div>
+            <div className="flex gap-0.5">{getRatingStars(4.5)}</div>
             <span className="text-sm text-gray-500">
-              ({product.reviewCount || 0})
+              ({7})
             </span>
           </div>
 
           {product.type && (
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-              {product.type}
+              new
             </span>
           )}
-        </div> */}
+        </div>
 
         {/* Price and Stock */}
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
