@@ -17,6 +17,7 @@ import { images } from "@/assets/assets";
 import Title from "@/components/ui/custom/Title";
 import Hero from "@/components/home/Hero";
 import ProductCard from "@/components/ui/ProductCard";
+import { Badge, Tag } from "lucide-react";
 
 const Home = () => {
   const { data } = useQuery({
@@ -158,27 +159,60 @@ const Home = () => {
         </section>
       </BlurFade>
 
-      <section className="px-4 py-3 lg:px-16 md:px-8 mb-12">
-        <div className="mb-4">
-          <Title title={"Featured Products"} />
+      <section className=" py-3  mb-12">
+        <div className="flex items-center gap-3 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
+          <Tag size={23} className="text-amber-200" />
+          <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
+            Featured Products
+          </h2>
         </div>
-        <CusCarousel autoplay={false} loop={false} showNavigation={false}>
-          {data?.map((product) => (
-            <CarouselItem
-              key={product.id}
-              className={"basis-1/2 md:basis-1/4 "}
-            >
-              <ProductCard
-               product={product} 
-               image={product.images[0]}
-               title={product.title}
-               description={product.description}
-               price={product.price}
-               category={product.category?.name}
-              />
-            </CarouselItem>
-          ))}
-        </CusCarousel>
+        <div className="px-4 lg:px-16 md:px-8">
+          <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+            {data?.map((product) => (
+              <CarouselItem
+                key={product.id}
+                className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
+              >
+                <ProductCard
+                  product={product}
+                  image={product.images[0]}
+                  title={product.title}
+                  description={product.description}
+                  price={product.price}
+                  category={product.category?.name}
+                />
+              </CarouselItem>
+            ))}
+          </CusCarousel>
+        </div>
+      </section>
+
+      <section className=" py-3  mb-12">
+        <div className="flex items-center gap-3 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
+          <Tag size={23} className="text-amber-200" />
+          <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
+            Featured Products
+          </h2>
+        </div>
+        <div className="px-4 lg:px-16 md:px-8">
+          <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+            {data?.map((product) => (
+              <CarouselItem
+                key={product.id}
+                className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
+              >
+                <ProductCard
+                  product={product}
+                  image={product.images[0]}
+                  title={product.title}
+                  description={product.description}
+                  price={product.price}
+                  category={product.category?.name}
+                />
+              </CarouselItem>
+            ))}
+          </CusCarousel>
+        </div>
       </section>
     </div>
   );
