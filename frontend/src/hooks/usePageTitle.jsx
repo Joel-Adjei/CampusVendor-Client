@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 const usePageTitle = ({title}) => {
     useEffect(() => {
-        document.title = `${title} - Campus Vendor`;
+        document.title = `${title} | Campus Vendor`;
         window.scrollTo(0, 0);
     }, [title]);
 

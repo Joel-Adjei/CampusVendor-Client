@@ -3,66 +3,39 @@ import React, { useEffect, useRef, useState } from "react";
 import CusSelect from "@/components/ui/custom/Select";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const Items = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    category: "Electronics",
-    price: "$59.99",
-  },
-  { id: 2, name: "Running Shoes", category: "Fashion", price: "$89.99" },
-  { id: 3, name: "Smartphone", category: "Electronics", price: "$699.99" },
-  { id: 4, name: "Cookbook", category: "Books", price: "$24.99" },
-  {
-    id: 5,
-    name: "Organic Coffee Beans",
-    category: "Groceries",
-    price: "$14.99",
-  },
-  { id: 6, name: "Yoga Mat", category: "Fitness", price: "$29.99" },
-  {
-    id: 7,
-    name: "Bluetooth Speaker",
-    category: "Electronics",
-    price: "$49.99",
-  },
-  { id: 8, name: "Denim Jacket", category: "Fashion", price: "$79.99" },
-  { id: 9, name: "Mystery Novel", category: "Books", price: "$19.99" },
-  { id: 10, name: "Trail Mix", category: "Groceries", price: "$9.99" },
-  { id: 11, name: "Fitness Tracker", category: "Fitness", price: "$129.99" },
-  {
-    id: 12,
-    name: "4K Action Camera",
-    category: "Electronics",
-    price: "$199.99",
-  },
-];
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "@/lib/axios";
 
 const Search = () => {
-  const [results, setResults] = useState([]);
   const [query, setQuery] = useState("");
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const InputRef = useRef();
 
-  const handleSearch = () => {
-    let filteredItems = Items.filter((item) =>
-      item.name.toLowerCase().includes(query.toLowerCase())
-    );
-
-    const selectedCategory = "all"; // Example: this could come from a state variable
-    if (selectedCategory !== "all") {
-      filteredItems = filteredItems.filter(
-        (item) => item.category.toLowerCase() === selectedCategory
-      );
-    }
-
-    setResults(filteredItems);
-  };
+  const { data: results, mutateAsync: fetchResults } = useMutation({
+    mutationFn: async () => {
+      try {
+        const response = await axios.get(`/products/?title=${query}`);
+        return response.data;
+      } catch (error) {
+        console.log("Error fetching search results:", error);
+      }
+    },
+    // queryKey: ["search-results", query],
+    // enabled: false, // Disable automatic query on mount
+  });
 
   useEffect(() => {
-    handleSearch();
+    InputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (query.length > 2) {
+      fetchResults().then((data) => {
+        queryClient.setQueryData(["search-results", query], data);
+      });
+    }
   }, [query]);
 
   return (
@@ -78,6 +51,7 @@ const Search = () => {
         <div className="relative flex-1">
           <input
             type="text"
+            ref={InputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for items..."
@@ -122,9 +96,9 @@ const Search = () => {
       <div className="mt-6">
         {/* Search Results */}
         <div className="min-h-[400px] ">
-          {results.map((item) => (
+          {results?.map((item) => (
             <div key={item.id}>
-              <h2>{item.name}</h2>
+              <h2>{item.title}</h2>
             </div>
           ))}
         </div>

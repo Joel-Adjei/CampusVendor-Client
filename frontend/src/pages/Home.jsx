@@ -13,13 +13,16 @@ import {
   FaShoppingCart,
   FaStore,
 } from "react-icons/fa";
-import { images } from "@/assets/assets";
+import { icons, images } from "@/assets/assets";
 import Title from "@/components/ui/custom/Title";
 import Hero from "@/components/home/Hero";
 import ProductCard from "@/components/ui/ProductCard";
 import { Badge, Tag } from "lucide-react";
+import usePageTitle from "@/hooks/usePageTitle";
 
 const Home = () => {
+  usePageTitle({ title: "Home" });
+
   const { data } = useQuery({
     queryKey: ["list-products"],
     queryFn: async () => {
@@ -38,6 +41,19 @@ const Home = () => {
     queryFn: async () => {
       try {
         const response = await axios.get("/categories?limit=6");
+        return response.data;
+      } catch (error) {
+        // toast.error("Failed to fetch categories");
+        console.log("Error fetching categories:", error);
+      }
+    },
+  });
+
+  const { data: cate2 } = useQuery({
+    queryKey: ["category-2"],
+    queryFn: async () => {
+      try {
+        const response = await axios.get("/products?offset=11&limit=20");
         return response.data;
       } catch (error) {
         // toast.error("Failed to fetch categories");
@@ -159,11 +175,12 @@ const Home = () => {
         </section>
       </BlurFade>
 
-      <section className=" py-3  mb-12">
-        <div className="flex items-center gap-3 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
-          <Tag size={23} className="text-amber-200" />
+      <section className=" py-3">
+        <div className="flex items-center gap-1 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
+          <img src={icons.titleCart} className="w-6 h-6" />
+          {/* <Tag size={23} className="text-amber-200" /> */}
           <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
-            Featured Products
+            Top Products
           </h2>
         </div>
         <div className="px-4 lg:px-16 md:px-8">
@@ -187,33 +204,57 @@ const Home = () => {
         </div>
       </section>
 
-      <section className=" py-3  mb-12">
-        <div className="flex items-center gap-3 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
-          <Tag size={23} className="text-amber-200" />
-          <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
-            Featured Products
-          </h2>
-        </div>
-        <div className="px-4 lg:px-16 md:px-8">
-          <CusCarousel autoplay={false} loop={false} showNavigation={false}>
-            {data?.map((product) => (
-              <CarouselItem
+      <BlurFade inView blur="0">
+        <section className=" py-3 mb-4">
+          <div className="flex items-center gap-1 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
+            {/* <Tag size={23} className="text-amber-200" /> */}
+            <img src={icons.titleCart} className="w-6 h-6" />
+            <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
+              Electronics
+            </h2>
+          </div>
+          <div className="px-4 lg:px-16 md:px-8">
+            <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+              {cate2?.map((product) => (
+                <CarouselItem
+                  key={product.id}
+                  className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
+                >
+                  <ProductCard
+                    product={product}
+                    image={product.images[0]}
+                    title={product.title}
+                    description={product.description}
+                    price={product.price}
+                    category={product.category?.name}
+                  />
+                </CarouselItem>
+              ))}
+            </CusCarousel>
+          </div>
+        </section>
+      </BlurFade>
+
+      <BlurFade inView blur="0">
+        <section className="px-4 md:px-8 lg:px-16">
+          <div className="mb-4">
+            <Title title={"Popular Products"} />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {cate2?.map((product) => (
+              <ProductCard
                 key={product.id}
-                className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
-              >
-                <ProductCard
-                  product={product}
-                  image={product.images[0]}
-                  title={product.title}
-                  description={product.description}
-                  price={product.price}
-                  category={product.category?.name}
-                />
-              </CarouselItem>
+                product={product}
+                image={product.images[0]}
+                title={product.title}
+                description={product.description}
+                price={product.price}
+                category={product.category?.name}
+              />
             ))}
-          </CusCarousel>
-        </div>
-      </section>
+          </div>
+        </section>
+      </BlurFade>
     </div>
   );
 };
