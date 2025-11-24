@@ -13,6 +13,8 @@ import shoe from "./imgs/Jordan Wallpaper Air Jordan 1 Black Grey.jpg"
 import titleCart from "./icons/title-cart.png"
 import line_01 from "./icons/line-01.png"
 import heroImg2 from "./imgs/woman-holding-shopping-bags.png"
+import phStore from "./imgs/phoneStore.png"
+
 
 
 export const images = {
@@ -29,7 +31,8 @@ export const images = {
 };
 
 export const heroImages = {
-    heroImg2
+    heroImg2,
+    phStore
 }
 
 export const icons = {

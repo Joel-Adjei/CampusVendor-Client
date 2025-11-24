@@ -12,11 +12,11 @@ const RootLayout =()=>{
     }
     
     return (
-        <div className="min-h-[calc(100vh-34px)] bg-white">
+        <div className=" bg-white">
             <div>
                 <Navbar />
             </div>
-        <div className="pt-15">
+        <div className="pt-15 min-h-[calc(100vh-84px)]">
             <Outlet />
         </div>
         </div>

@@ -11,7 +11,7 @@ const Hero = () => {
     <section className=" h-[80vh] overflow-hidden">
       {/* <HeroSection1 /> */}
       <CusCarousel autoplay={true} interval={7000} showNavigation={false}>
-        <CarouselItem>
+        <CarouselItem >
           <HeroSection1 />
         </CarouselItem>
         <CarouselItem>
@@ -31,17 +31,17 @@ const HeroSection1 = () => {
                      md:flex-row md:justify-center md:items-center md:gap-7 md:px-7 md:py-4`}
     >
       <div className="absolute size-40 bg-gray-100 rounded-full -bottom-20 -left-14" />
-      <div className="absolute w-40 h-[900px] bg-amber-300 -top-30 right-2 md:right-40 rotate-12 z-0" />
+      <div className="absolute w-40 h-[900px] bg-slate-500/50 -top-30 right-2 md:right-50 rotate-12 z-0" />
 
       <BlurFade direction="top" duration={0.5} inView>
         <div className={``}>
-          <p className="font-Montserrat font-thin leading-none text-gray-600">
+          <p className="font-Montserrat font-light leading-none text-gray-600">
             Get Your
           </p>
-          <h3 className="text-[140px] stroke-3 stroke-black leading-none font-Delirium text-blue-700 font-light">
+          <h3 className="text-[140px] stroke-3 stroke-black leading-none font-Delirium text-slate-600 font-light">
             Sneakers
           </h3>
-          <Button className={"hidden md:flex"} variant="secondary">
+          <Button iconType="icon-right" className={"hidden md:flex text-white bg-gray-400 border-slate-500"} variant="outline" Icon={ArrowRight}>
             Explore
           </Button>
         </div>
@@ -50,23 +50,29 @@ const HeroSection1 = () => {
         <BlurFade direction="bottom" duration={0.6} delay={0.3}>
           <img
             src={images.sneaker}
-            className="size-70 md:size-110 object-contain "
+            className="size-70 md:h-90 lg:h-full lg:w-105 object-contain "
           />
         </BlurFade>
       </div>
-      <Button className={"flex md:hidden text-md z-20"} variant="primary">
-        Explore
-      </Button>
+          <Button iconType="icon-right" className={"flex md:hidden text-white bg-gray-400 border-slate-500"} variant="outline" Icon={ArrowRight}>
+            Explore
+          </Button>
     </div>
   );
 };
 
 const HeroSection2 = () => {
   return (
-    <div className="h-full flex flex-col justify-center md:flex-row md:justify-between gap-6 bg-slate-50">
-      <BlurFade direction="right" duration={0.5} inView>
-        <div className="w-full h-full flex flex-col items-center gap-2 px-6 pt-9 md:items-start md:justify-center lg:pl-42">
-          <h3 className=" font-Delirium font-light text-8xl md:text-[120px] text-blue-300 leading-13 text-center md:text-left">
+    <div className={`relative h-[80vh] w-full flex flex-col items-center justify-end bg-slate-50 px-4 overflow-hidden
+                     md:flex-row-reverse md:justify-center md:items-center md:gap-7 md:px-7 md:py-4`}>
+      
+      <div className="absolute w-40 h-[900px] bg-blue-300/50 -top-30 right-2 md:left-50 rotate-12 z-0" />
+      
+      
+      
+      <BlurFade direction="right" duration={0.5} inView className={""}>
+        <div className=" flex flex-col items-center gap-2 px-6 md:items-start md:justify-center ">
+          <h3 className=" font-Delirium font-light text-8xl md:text-[120px] text-blue-500 leading-13 text-center md:text-left">
             Shop Faster <br />{" "}
           </h3>
 
@@ -87,13 +93,13 @@ const HeroSection2 = () => {
         duration={0.6}
         delay={0.3}
         inView
-        className={"h-100 md:h-120 self-end"}
+        className={" md:h-120"}
       >
-        <div className="h-100 md:h-120 self-end">
+        <div className=" md:h-120">
           <img
-            src={heroImages.heroImg2}
+            src={heroImages.phStore}
             alt="Hero Image"
-            className="object-contain h md:h-full"
+            className="object-contain w-70 md:w-full md:h-full"
           />
         </div>
       </BlurFade>
