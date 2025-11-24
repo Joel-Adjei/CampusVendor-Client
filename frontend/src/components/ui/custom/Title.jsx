@@ -8,7 +8,7 @@ const Title = ({ title }) => {
         <div>
           <img src={icons.titleCart} className="h-6 w-6 object-contain" />
         </div>
-        <h3 className="text-lg md:p-1.5 md:text-3xl font-bold bg-gradient-to-tr from-blue-700 to-blue-400 bg-clip-text text-transparent">
+        <h3 className="text-lg md:p-1.5 md:text-2xl font-bold bg-gradient-to-tr from-blue-700 to-blue-400 bg-clip-text text-transparent">
           {title}
         </h3>
       </div>

@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Navbar from "@/components/navbar/Navbar"
 import { useAuthStore } from "@/store/authStore"
 import { Outlet, useNavigate } from "react-router-dom"
@@ -19,6 +20,7 @@ const RootLayout =()=>{
         <div className="pt-15 min-h-[calc(100vh-84px)]">
             <Outlet />
         </div>
+        <Footer />
         </div>
     )
 }
