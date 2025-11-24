@@ -46,17 +46,19 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-15">
           {/* Logo/Brand Name */}
-          <div className="flex font-Montserrat items-center flex-row-reverse gap-2 flex-shrink-0">
+          <div className="flex font-Montserrat items-center flex-row-reverse gap-3 flex-shrink-0">
+            <div className="lg:hidden bg-gray-400 rounded-full p-1">
             <Search 
-              className="lg:hidden left-3 top-2.5 w-5 h-5 text-gray-400" 
+              className=" left-3 top-2.5 w-4 h-4 text-gray-100" 
               onClick={()=> navigate("/search")}
             />
+            </div>
             
             <a href="#" className="flex items-center space-x-2">
                 
-              <img src={images.logo} className="h-10 w-10 object-contain mr-3" />
+              <img src={images.logo} className="h-8 w-8 object-contain mr-3" />
               
-              <span className="hidden md:block text-2xl text-blue-500 font-extrabold tracking-tight">
+              <span className="hidden md:block text-dxl text-blue-500 font-extrabold tracking-tight">
                 Campus<span className="font-medium italic text-yellow-300"> Vendor</span>
               </span>
             </a>
@@ -76,7 +78,7 @@ const Navbar = () => {
 
           <div className="hidden xl:block">
             <div className="relative flex items-center">
-              <Search className="sm:absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+              <Search className="md:absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search items..."
@@ -129,7 +131,7 @@ const Navbar = () => {
             </>
             ) : (
               <div className="flex items-center">
-                <Button onClick={()=> handleNavigate("signup")}  variant="primary" className="hidden md:flex ml-4 h-fit">
+                <Button onClick={()=> handleNavigate("signup")}  variant="primary" className="hidden lg:flex ml-4 h-fit">
                     Get Started
                 </Button>
                 <Button onClick={()=> handleNavigate("login")} variant="outline" className={"ml-1 h-fit"}>

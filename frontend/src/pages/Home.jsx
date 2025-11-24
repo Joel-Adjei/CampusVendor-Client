@@ -112,14 +112,14 @@ const Home = () => {
       </section>
 
       <BlurFade inView blur="0">
-        <section className="h-50 sm:70 lg:h-95 w-full grid grid-cols-4 gap-2 bg-slate-100/50 py-4 px-4 md:px-8 lg:px-16">
+        <section className="h-50 sm:h-70 lg:h-95 w-full grid grid-cols-4 gap-2 bg-slate-100/50 py-4 px-4 md:px-8 lg:px-16">
           <div className="relative bg-gradient-to-br from-blue-800 to-blue-500 rounded-lg row-span-2 col-span-3 overflow-hidden">
             <div className="h-240 w-60 bg-white absolute -rotate-45 -top-76 -right-80 md:-right-50 " />
 
             <div className="relative h-full font-Montserrat">
               <div className="h-full flex justify-center items-center z-10 px-4">
                 <div className="w-1/2">
-                  <h3 className=" text-lg md:text-3xl leading-4 font-semibold font-Montserrat text-white">
+                  <h3 className=" text-lg md:text-3xl leading-4 sm:leading-none font-semibold font-Montserrat text-white">
                     Phones and accessories
                   </h3>
                   {/* <p className="text-gray-200 text-xs md:text-lg">
@@ -137,7 +137,7 @@ const Home = () => {
                 <div className="">
                   <img
                     src={images.iphone}
-                    className=" w-30 md:w-75 object-contain z-10"
+                    className=" w-30 sm:w-40 md:w-75 object-contain z-10"
                   />
                 </div>
               </div>
