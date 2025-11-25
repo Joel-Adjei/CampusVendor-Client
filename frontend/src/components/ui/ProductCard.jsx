@@ -14,7 +14,7 @@ import {
 import Button from "./custom/Button";
 
 const ProductCard = ({
-//   id,
+  //   id,
   product = {},
   price,
   image,
@@ -22,6 +22,8 @@ const ProductCard = ({
   onAddToCart,
   onViewDetails,
   onToggleFavorite,
+  rating,
+  reviewsCount,
   className = "",
   variant = "default",
 }) => {
@@ -176,10 +178,8 @@ const ProductCard = ({
         {/* Rating and Reviews */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex gap-0.5">{getRatingStars(4.5)}</div>
-            <span className="text-sm text-gray-500">
-              ({7})
-            </span>
+            <div className="flex gap-0.5">{getRatingStars(rating || 4)}</div>
+            <span className="text-sm text-gray-500">({reviewsCount || 7})</span>
           </div>
 
           {product.type && (

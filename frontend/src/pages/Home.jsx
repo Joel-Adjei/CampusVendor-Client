@@ -27,8 +27,8 @@ const Home = () => {
     queryKey: ["list-products"],
     queryFn: async () => {
       try {
-        const response = await axios.get("/products?limit=6&offset=0");
-        return response.data;
+        const response = await axios.get("/products?limit=6");
+        return response.data.products;
       } catch (error) {
         // toast.error("Failed to fetch products");
         console.log("Error fetching products:", error);
@@ -37,11 +37,11 @@ const Home = () => {
   });
 
   const { data: categories } = useQuery({
-    queryKey: ["list-categories"],
+    queryKey: ["categories"],
     queryFn: async () => {
       try {
-        const response = await axios.get("/categories?limit=6");
-        return response.data;
+        const response = await axios.get("/products/categories?limit=6");
+        return response.data || [];
       } catch (error) {
         // toast.error("Failed to fetch categories");
         console.log("Error fetching categories:", error);
@@ -53,8 +53,8 @@ const Home = () => {
     queryKey: ["category-2"],
     queryFn: async () => {
       try {
-        const response = await axios.get("/products?offset=11&limit=20");
-        return response.data;
+        const response = await axios.get("/products?skip=11&limit=20");
+        return response.data.products;
       } catch (error) {
         // toast.error("Failed to fetch categories");
         console.log("Error fetching categories:", error);
@@ -75,7 +75,7 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 gap-y-6">
-            {categories?.map((category) => (
+            {categories?.slice(0, 6).map((category) => (
               <div
                 key={category.id}
                 className="flex flex-col items-center rounded-lg hover:shadow-lg transition-shadow cursor-pointer"
@@ -127,6 +127,70 @@ const Home = () => {
         </CusCarousel>
       </section>
 
+      <section className=" py-3">
+        <div className="flex items-center gap-1 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
+          <img src={icons.titleCart} className="w-6 h-6" />
+          {/* <Tag size={23} className="text-amber-200" /> */}
+          <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
+            Top Products
+          </h2>
+        </div>
+        <div className="px-4 lg:px-16 md:px-8">
+          <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+            {data?.map((product) => (
+              <CarouselItem
+                key={product.id}
+                className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
+              >
+                <ProductCard
+                  product={product}
+                  image={product.images[0]}
+                  title={product.title}
+                  description={product.description}
+                  price={product.price}
+                  rating={product.rating}
+                  reviewsCount={product.reviews.length}
+                  category={product.category?.name}
+                />
+              </CarouselItem>
+            ))}
+          </CusCarousel>
+        </div>
+      </section>
+
+      <BlurFade inView blur="0">
+        <section className=" py-3 mb-4">
+          <div className="flex items-center gap-1 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
+            {/* <Tag size={23} className="text-amber-200" /> */}
+            <img src={icons.titleCart} className="w-6 h-6" />
+            <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
+              Electronics
+            </h2>
+          </div>
+          <div className="px-4 lg:px-16 md:px-8">
+            <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+              {cate2?.map((product) => (
+                <CarouselItem
+                  key={product.id}
+                  className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
+                >
+                  <ProductCard
+                    product={product}
+                    image={product.images[0]}
+                    title={product.title}
+                    description={product.description}
+                    price={product.price}
+                    rating={product.rating}
+                    reviewsCount={product.reviews.length}
+                    category={product.category?.name}
+                  />
+                </CarouselItem>
+              ))}
+            </CusCarousel>
+          </div>
+        </section>
+      </BlurFade>
+
       <BlurFade inView blur="0">
         <section className="h-50 sm:h-70 lg:h-95 w-full grid grid-cols-4 gap-2 bg-slate-100/50 py-4 px-4 md:px-8 lg:px-16">
           <div className="relative bg-gradient-to-br from-blue-800 to-blue-500 rounded-lg row-span-2 col-span-3 overflow-hidden">
@@ -175,66 +239,6 @@ const Home = () => {
         </section>
       </BlurFade>
 
-      <section className=" py-3">
-        <div className="flex items-center gap-1 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
-          <img src={icons.titleCart} className="w-6 h-6" />
-          {/* <Tag size={23} className="text-amber-200" /> */}
-          <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
-            Top Products
-          </h2>
-        </div>
-        <div className="px-4 lg:px-16 md:px-8">
-          <CusCarousel autoplay={false} loop={false} showNavigation={false}>
-            {data?.map((product) => (
-              <CarouselItem
-                key={product.id}
-                className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
-              >
-                <ProductCard
-                  product={product}
-                  image={product.images[0]}
-                  title={product.title}
-                  description={product.description}
-                  price={product.price}
-                  category={product.category?.name}
-                />
-              </CarouselItem>
-            ))}
-          </CusCarousel>
-        </div>
-      </section>
-
-      <BlurFade inView blur="0">
-        <section className=" py-3 mb-4">
-          <div className="flex items-center gap-1 bg-gradient-to-br from-blue-700 to-blue-500 border-r-15 border-amber-300 w-full pl-7 lg:pl-19  py-2">
-            {/* <Tag size={23} className="text-amber-200" /> */}
-            <img src={icons.titleCart} className="w-6 h-6" />
-            <h2 className="text-lg md:text-xl font-Montserrat font-semibold text-slate-100">
-              Electronics
-            </h2>
-          </div>
-          <div className="px-4 lg:px-16 md:px-8">
-            <CusCarousel autoplay={false} loop={false} showNavigation={false}>
-              {cate2?.map((product) => (
-                <CarouselItem
-                  key={product.id}
-                  className={"basis-1/2 md:basis-1/4 lg:basis-1/6 py-6"}
-                >
-                  <ProductCard
-                    product={product}
-                    image={product.images[0]}
-                    title={product.title}
-                    description={product.description}
-                    price={product.price}
-                    category={product.category?.name}
-                  />
-                </CarouselItem>
-              ))}
-            </CusCarousel>
-          </div>
-        </section>
-      </BlurFade>
-
       <BlurFade inView blur="0">
         <section className="px-4 md:px-8 lg:px-16">
           <div className="mb-4">
@@ -249,6 +253,8 @@ const Home = () => {
                 title={product.title}
                 description={product.description}
                 price={product.price}
+                rating={product.rating}
+                reviewsCount={product.reviews.length}
                 category={product.category?.name}
               />
             ))}
