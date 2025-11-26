@@ -12,6 +12,9 @@ import {
   DollarSign,
 } from "lucide-react";
 import Button from "./custom/Button";
+import { useNavigate } from "react-router-dom";
+import { formatPrice } from "@/lib/utils";
+import { getRatingStars } from "@/lib/minComp";
 
 const ProductCard = ({
   //   id,
@@ -23,35 +26,17 @@ const ProductCard = ({
   onViewDetails,
   onToggleFavorite,
   rating,
+  type = "new",
   reviewsCount,
   className = "",
   variant = "default",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(product.isFavorite || false);
   const [imageLoaded, setImageLoaded] = useState(false);
-
-  const handleFavoriteClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsFavorite(!isFavorite);
-    if (onToggleFavorite) {
-      onToggleFavorite(product.id, !isFavorite);
-    }
-  };
-
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onAddToCart) {
-      onAddToCart(product);
-    }
-  };
+  const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    if (onViewDetails) {
-      onViewDetails(product);
-    }
+    navigate(`/products/${product.id}`);
   };
 
   const getVariantStyles = () => {
@@ -65,21 +50,33 @@ const ProductCard = ({
     }
   };
 
-  const getRatingStars = (rating = 0) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-3 h-3 ${
-          i < Math.floor(rating)
-            ? "text-yellow-400 fill-current"
-            : "text-gray-300"
-        }`}
-      />
-    ));
-  };
-
-  const formatPrice = (price) => {
-    return `GH₵${price?.toFixed(2) || "0.00"}`;
+  const {
+    label,
+    styles,
+    icon: Icon,
+  } = () => {
+    switch (type) {
+      case "new":
+        return {
+          label: "New",
+          styles: "bg-green-100 text-green-800",
+          icon: <Badge className="w-3 h-3 mr-1" />,
+        };
+      case "out":
+        return {
+          label: "Out of Stock",
+          styles: "bg-red-100 text-red-800",
+          icon: <Clock className="w-3 h-3 mr-1" />,
+        };
+      case "service":
+        return {
+          label: "Service",
+          styles: "bg-blue-100 text-blue-800",
+          icon: <User className="w-3 h-3 mr-1" />,
+        };
+      default:
+        return null;
+    }
   };
 
   return (
@@ -102,21 +99,19 @@ const ProductCard = ({
       <div className="absolute bottom-0 left-0 w-16 h-16 bg-blue-500 rounded-full opacity-5 translate-y-8 -translate-x-8 transition-transform duration-500 group-hover:scale-150"></div>
 
       {/* Favorite Button */}
-      <button
-        onClick={handleFavoriteClick}
-        className={`
-          absolute top-3 right-3 z-20 p-2 rounded-full
+      <div
+        className={` } from "@/lib
+          absolute top-1.5 right-1.5 z-20 p-2 rounded-full
           transition-all duration-300 transform hover:scale-110
-          ${
-            isFavorite
-              ? "bg-red-100 text-red-500"
-              : "bg-white/80 text-gray-400 hover:text-red-500"
-          }
-          ${isHovered ? "opacity-100" : "opacity-0"}
         `}
       >
-        <Heart className={`w-4 h-4 ${isFavorite ? "fill-current" : ""}`} />
-      </button>
+        <p
+          className={`flex items-center text-xs md:text-xs font-medium ${styles} px-2 py-1 rounded-xs w-fit`}
+        >
+          {Icon}
+          {label}
+        </p>
+      </div>
 
       {/* Product Image */}
       <div className="relative h-40 rounded-t-2xl overflow-hidden">
@@ -141,26 +136,12 @@ const ProductCard = ({
         {/* Overlay Actions */}
         <div
           className={`
-          absolute inset-0 bg-black/40 
+          absolute inset-0 bg-black/10 
           flex items-center justify-center gap-3
           transition-all duration-300
           ${isHovered ? "opacity-100" : "opacity-0"}
         `}
-        >
-          <button
-            onClick={handleViewDetails}
-            className="p-3 bg-white/90 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:scale-110"
-          >
-            <Eye className="w-5 h-5" />
-          </button>
-
-          <button
-            onClick={handleAddToCart}
-            className="p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-110"
-          >
-            <ShoppingCart className="w-5 h-5" />
-          </button>
-        </div>
+        ></div>
       </div>
 
       {/* Product Info */}
@@ -170,9 +151,6 @@ const ProductCard = ({
           <h3 className="font-medium text-gray-700 text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
             {title || "Product Name"}
           </h3>
-          {/* <p className="text-xs md:text-sm text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-sm w-fit">
-            {category || "Category"}
-          </p> */}
         </div>
 
         {/* Rating and Reviews */}

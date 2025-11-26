@@ -19,9 +19,11 @@ import Hero from "@/components/home/Hero";
 import ProductCard from "@/components/ui/ProductCard";
 import { Badge, Tag } from "lucide-react";
 import usePageTitle from "@/hooks/usePageTitle";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   usePageTitle({ title: "Home" });
+  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: ["list-products"],
@@ -74,13 +76,13 @@ const Home = () => {
             <Title title={"Categories"} />
           </div>
 
-          <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 gap-y-6">
-            {categories?.slice(0, 6).map((category) => (
+          <div className="grid grid-cols-4 lg:grid-cols-8 gap-3 gap-y-6">
+            {categories?.slice(0, 8).map((category) => (
               <div
                 key={category.id}
                 className="flex flex-col items-center rounded-lg hover:shadow-lg transition-shadow cursor-pointer"
               >
-                <div className="w-15 h-15  rounded-sm border-2 border-amber-300 overflow-hidden">
+                <div className="w-13.5 h-13.5  rounded-sm border-2 border-amber-300 overflow-hidden">
                   <img
                     src={category.image}
                     alt={category.name}
@@ -210,6 +212,7 @@ const Home = () => {
                     Icon={FaShoppingCart}
                     iconType="icon-right"
                     className="mt-4 text-md"
+                    onClick={() => navigate("/products")}
                   >
                     Shop
                   </Button>
@@ -240,7 +243,7 @@ const Home = () => {
       </BlurFade>
 
       <BlurFade inView blur="0">
-        <section className="px-4 md:px-8 lg:px-16">
+        <section className="px-4 md:px-8 lg:px-16 mt-5">
           <div className="mb-4">
             <Title title={"Popular Products"} />
           </div>

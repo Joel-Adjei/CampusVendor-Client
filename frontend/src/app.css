@@ -20,3 +20,61 @@
   scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
 }
 
+:root {
+  --navy: #11296b;
+  --blue: #1e96fc;
+  --light: #ededed;
+  --yellow1: #ffdb57;
+  --yellow2: #ffcb05;
+}
+
+/* subtle floating animation for the main image */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* sliding gradient for add-to-cart */
+.add-to-cart {
+  background: linear-gradient(
+    90deg,
+    var(--navy),
+    var(--blue),
+    var(--yellow1),
+    var(--yellow2)
+  );
+  background-size: 300% 100%;
+  animation: slide 4s linear infinite;
+  box-shadow: 0 8px 20px rgba(17, 41, 107, 0.16);
+}
+@keyframes slide {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* small utility to slightly desaturate the body background */
+body {
+  background-color: var(--light);
+}
+
+/* ensure images don't get weird outlines when clicked */
+button:focus {
+  outline: none;
+}
