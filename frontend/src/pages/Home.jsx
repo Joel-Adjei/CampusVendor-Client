@@ -244,7 +244,7 @@ const Home = () => {
           <div className="mb-4">
             <Title title={"Popular Products"} />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {cate2?.map((product) => (
               <ProductCard
                 key={product.id}

@@ -116,10 +116,10 @@ const Products = () => {
             optionsLabel={"Categories"}
             options={[
               { label: "All Categories", value: "all" },
-              ...categories?.map((category) => ({
+              ...(categories?.map((category) => ({
                 label: category,
                 value: category,
-              })),
+              })) || []),
             ]}
             value={selectedCategory}
             onChange={(option) => {
