@@ -7,8 +7,13 @@ import ProductCard from "@/components/ui/ProductCard";
 import { getRatingStars } from "@/lib/minComp";
 import { formatPrice } from "@/lib/utils";
 import { BookMarked } from "lucide-react";
+import { useParams } from "react-router-dom";
 import React, { useState } from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import axios from "@/lib/axios";
+import LoadingSpinner from "@/components/ui/custom/LoadingSpinner";
+import usePageTitle from "@/hooks/usePageTitle";
 
 const images = [
   "https://picsum.photos/id/1018/800/800",
@@ -17,28 +22,57 @@ const images = [
   "https://picsum.photos/id/1005/800/800",
 ];
 
-const Icon = ({ children }) => (
-  <div className="w-10 h-10 rounded-lg bg-white/30 flex items-center justify-center shadow-sm">
-    {children}
-  </div>
-);
-
 const ProductDetails = () => {
+  const { id } = useParams();
   const [selected, setSelected] = useState(0);
   const [type, SetType] = useState("ser");
 
+  const { data: details, isLoading } = useQuery({
+    queryKey: ["details", id],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`/products/${id}`);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+        throw error;
+      }
+    },
+  });
+
+  usePageTitle({ title: details?.title });
+
   const ratingStats = [
-    { label: 5, reviews: 30 },
-    { label: 4, reviews: 37 },
-    { label: 3, reviews: 40 },
-    { label: 2, reviews: 10 },
-    { label: 1, reviews: 5 },
+    {
+      label: 5,
+      reviews: details?.reviews.filter((review) => review.rating === 5).length,
+    },
+    {
+      label: 4,
+      reviews: details?.reviews.filter((review) => review.rating === 4).length,
+    },
+    {
+      label: 3,
+      reviews: details?.reviews.filter((review) => review.rating === 3).length,
+    },
+    {
+      label: 2,
+      reviews: details?.reviews.filter((review) => review.rating === 2).length,
+    },
+    {
+      label: 1,
+      reviews: details?.reviews.filter((review) => review.rating === 1).length,
+    },
   ];
 
   const rateParcentage = (reviews) => {
-    const totalReview = 122;
-    return (reviews / 122) * 100;
+    const totalReview = details?.reviews.length || 0;
+    return (reviews / totalReview) * 100;
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 font-Montserrat flex items-center justify-center">
@@ -47,7 +81,7 @@ const ProductDetails = () => {
         <div className="flex flex-col gap-4">
           <div className="relative rounded-xl overflow-hidden shadow-2xl transform transition duration-500 hover:scale-105 animate-float">
             <img
-              src={images[selected]}
+              src={details?.images[selected]}
               alt="product"
               className="w-full h-[460px] object-cover"
             />
@@ -62,7 +96,7 @@ const ProductDetails = () => {
           </div>
 
           <div className="flex gap-3">
-            {images.map((src, i) => (
+            {details?.images.map((src, i) => (
               <button
                 key={src}
                 onClick={() => setSelected(i)}
@@ -87,19 +121,17 @@ const ProductDetails = () => {
           <div className="flex flex-col items-start justify-between gap-4">
             <div>
               <h1 className="text-xl md:text-3xl font-semibold text-[var(--navy)] mb-2">
-                Urban Traveler Backpack
+                {details?.title}
               </h1>
               <p className="text-gray-700 leading-relaxed text-sm md:text-md">
-                A thoughtfully designed backpack for city commutes and weekend
-                adventures. Water-resistant fabric, organized compartments, and
-                comfortable straps make this a daily carry staple.
+                {details?.description}
               </p>
             </div>
 
             <div className="flex items-center gap-2 text-right">
               <div className=" text-gray-500 text-sm">Price: </div>
               <div className="text-xl font-bold text-[var(--navy)]">
-                {formatPrice(126)}
+                {formatPrice(details?.price)}
               </div>
             </div>
           </div>
@@ -141,9 +173,11 @@ const ProductDetails = () => {
           <div className="bg-[var(--light)] mt-2 rounded-lg shadow-md p-3 md:p-6 ">
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center gap-0.5">
-                {getRatingStars(4)}
+                {getRatingStars(details?.rating)}
               </div>
-              <span className="text-sm text-gray-700">1.2k reviews</span>
+              <span className="text-sm text-gray-700">
+                {details?.reviews.length} reviews
+              </span>
             </div>
 
             <div className="space-y-2">
@@ -174,28 +208,30 @@ const ProductDetails = () => {
             </div>
 
             <div className="space-y-4 ">
-              {[1, 2, 3].map((index) => (
-                <div
-                  key={index}
-                  className="bg-slate-50 border border-amber-100 rounded-md p-3"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="size-8 flex items-center justify-center rounded-full bg-gray-300">
-                      <FaUser className="text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-700">Customer Name</p>
-                      <div className="flex items-center text-sm">
-                        {getRatingStars(index)}
+              {details?.reviews.map(
+                ({ rating, comment, reviewerName }, index) => (
+                  <div
+                    key={index}
+                    className="bg-slate-50 border border-slate-100 rounded-md p-3"
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="size-8 flex items-center justify-center rounded-full bg-gray-300">
+                        <FaUser className="text-gray-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-700">{reviewerName}</p>
+                        <div className="flex items-center text-sm">
+                          {getRatingStars(rating)}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="text-gray-500 text-sm p-3 border-t border-gray-200">
-                    <p>Message here</p>
+                    <div className="text-gray-500 text-sm p-3 border-t border-gray-200">
+                      <p>{comment}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
         </div>
@@ -204,7 +240,7 @@ const ProductDetails = () => {
       {/* Related Product */}
       <div>
         <div className="px-4 lg:px-16 md:px-8">
-          <CusCarousel autoplay={false} loop={false} showNavigation={false}>
+          <CusCarousel autoplay={false} loop={true} showNavigation={false}>
             {[]?.map((product) => (
               <CarouselItem
                 key={product.id}
