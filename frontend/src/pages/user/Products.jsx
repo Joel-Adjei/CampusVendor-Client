@@ -154,6 +154,7 @@ const Products = () => {
               <ProductCard
                 key={item.id}
                 id={item.id}
+                product={item}
                 title={item.title}
                 price={item.price}
                 image={item.images[0]}
