@@ -21,8 +21,16 @@ const commonAuthSchema = {
 const loginValidationSchema = Yup.object().shape(commonAuthSchema);
 
 const Login = () => {
-  const navigate = useNavigate()
-  const {updateLogin , updateVendor, admins , updateName , updateRole , vendors , users} = useAuthStore()
+  const navigate = useNavigate();
+  const {
+    updateLogin,
+    updateVendor,
+    admins,
+    updateName,
+    updateRole,
+    vendors,
+    users,
+  } = useAuthStore();
 
   const handleLogIn = async (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
@@ -34,40 +42,45 @@ const Login = () => {
       // console.log("Login response:", res.data);
 
       // Check in vendors array
-      const vendor = vendors.find((v => v.email === email && v.password === password));
+      const vendor = vendors.find(
+        (v) => v.email === email && v.password === password
+      );
       if (vendor) {
         updateLogin(values);
         updateVendor(vendor);
-        navigate("/vendor/" , { replace: true });
+        navigate("/vendor/", { replace: true });
         return;
       }
       // Check in users array
-      const user = users.find((u => u.email === email && u.password === password));
+      const user = users.find(
+        (u) => u.email === email && u.password === password
+      );
       if (user) {
         updateLogin({ email, password });
         updateName({ name: user.name });
         updateRole({ role: "customer" });
-        navigate("/" , { replace: true });
+        navigate("/", { replace: true });
         return;
       }
 
-      const admin = admins.find((a => a.email === email && a.password === password));
+      const admin = admins.find(
+        (a) => a.email === email && a.password === password
+      );
       if (admin) {
         updateLogin({ email, password });
         updateName({ name: admin.name });
         updateRole({ role: "admin" });
-        navigate("/admin/" , { replace: true });
-        resetForm()
+        navigate("/admin/", { replace: true });
+        resetForm();
         return;
       }
-      
+
       toast.error("Invalid email or password");
       // resetForm();
-      
     } catch (error) {
       toast.error(error.response.data.message);
-      console.error(error)
-    }finally {
+      console.error(error);
+    } finally {
       setSubmitting(false);
     }
   };
@@ -86,22 +99,25 @@ const Login = () => {
       <section className="relative overflow-hidden h-40 md:min-h-[100vh] w-full md:bg-gradient-to-br md:from-blue-700 md:to-blue-400 md:flex-1/2">
         {/* <div className="absolute -top-20 -right-40 border-50 border-white/20 size-100 rounded-full" /> */}
         <div className="absolute md:hidden bottom-0 -left-10  bg-gradient-to-br from-white/60 to-70% to-transparent size-70 rounded-full" />
-        <img src={images.img2} className="opacity-30 md:opacity-100 absolute -top-30 md:top-0 left-0 w-full h-full object-cover" />
+        <img
+          src={images.img2}
+          className="opacity-30 md:opacity-100 absolute -top-30 md:top-0 left-0 w-full h-full object-cover"
+        />
 
-        
         <div className="absolute top-11 left-1/2 transform -translate-x-1/2 md:left-3 md:top-4 z-30 flex gap-3 items-center ">
           <div className="bg-white font-Montserrat size-17 md:size-9 rounded-full"></div>
-
         </div>
       </section>
 
       <section className=" bg-gray-50 flex-1 md:flex-1/2 md:h-[100vh] overflow-auto rounded-t-2xl md:rounded-none">
-        <BlurFade 
-            direction="top" 
-            blur="0" 
-            delay={0.6}
-            duration={1}
-            className={"flex  justify-center  md:min-h-[100vh] px-8 sm:px-0 md:items-center"}
+        <BlurFade
+          direction="top"
+          blur="0"
+          delay={0.6}
+          duration={1}
+          className={
+            "flex  justify-center  md:min-h-[100vh] px-8 sm:px-0 md:items-center"
+          }
         >
           <div className="w-full  mt-17 font-Montserrat">
             <div className="flex flex-col justify-center mb-6">
@@ -128,7 +144,7 @@ const Login = () => {
                 name="email"
                 type="email"
                 Icon={Mail}
-                placeholder="e.g., test@ug.edu.gh or admin@ug.edu.gh"
+                placeholder="e.g. email@email.com"
                 formikInstance={loginFormik}
               />
               <InputField
