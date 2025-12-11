@@ -5,13 +5,14 @@ import { BlurFade } from "../ui/blur-fade";
 import { ArrowRight } from "lucide-react";
 import CusCarousel from "../ui/custom/Carousel";
 import { CarouselItem } from "../ui/carousel";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   return (
     <section className=" h-[80vh] overflow-hidden">
       {/* <HeroSection1 /> */}
       <CusCarousel autoplay={true} interval={7000} showNavigation={false}>
-        <CarouselItem >
+        <CarouselItem>
           <HeroSection1 />
         </CarouselItem>
         <CarouselItem>
@@ -25,6 +26,7 @@ const Hero = () => {
 export default Hero;
 
 const HeroSection1 = () => {
+  const navigate = useNavigate();
   return (
     <div
       className={`relative h-full w-full flex flex-col items-center justify-center bg-slate-50 px-4 overflow-hidden
@@ -41,7 +43,13 @@ const HeroSection1 = () => {
           <h3 className="text-[140px] stroke-3 stroke-black leading-none font-Delirium text-slate-600 font-light">
             Sneakers
           </h3>
-          <Button iconType="icon-right" className={"hidden md:flex text-white bg-gray-400 border-slate-500"} variant="outline" Icon={ArrowRight}>
+          <Button
+            iconType="icon-right"
+            onClick={() => navigate("/products/1")}
+            className={"hidden md:flex text-white bg-gray-400 border-slate-500"}
+            variant="outline"
+            Icon={ArrowRight}
+          >
             Explore
           </Button>
         </div>
@@ -54,22 +62,26 @@ const HeroSection1 = () => {
           />
         </BlurFade>
       </div>
-          <Button iconType="icon-right" className={"flex md:hidden text-white bg-gray-400 border-slate-500"} variant="outline" Icon={ArrowRight}>
-            Explore
-          </Button>
+      <Button
+        iconType="icon-right"
+        className={"flex md:hidden text-white bg-gray-400 border-slate-500"}
+        variant="outline"
+        Icon={ArrowRight}
+      >
+        Explore
+      </Button>
     </div>
   );
 };
 
 const HeroSection2 = () => {
   return (
-    <div className={`relative h-[80vh] w-full flex flex-col items-center justify-end bg-slate-50 px-4 overflow-hidden
-                     md:flex-row-reverse md:justify-center md:items-center md:gap-7 md:px-7 md:py-4`}>
-      
+    <div
+      className={`relative h-[80vh] w-full flex flex-col items-center justify-end bg-slate-50 px-4 overflow-hidden
+                     md:flex-row-reverse md:justify-center md:items-center md:gap-7 md:px-7 md:py-4`}
+    >
       <div className="absolute w-40 h-[900px] bg-blue-300/50 -top-30 right-2 md:left-50 rotate-12 z-0" />
-      
-      
-      
+
       <BlurFade direction="right" duration={0.5} inView className={""}>
         <div className=" flex flex-col items-center gap-2 px-6 md:items-start md:justify-center ">
           <h3 className=" font-Delirium font-light text-8xl md:text-[120px] text-blue-500 leading-13 text-center md:text-left">

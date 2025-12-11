@@ -8,9 +8,9 @@ import { getRatingStars } from "@/lib/minComp";
 import { formatPrice } from "@/lib/utils";
 import { BookMarked } from "lucide-react";
 import { useParams } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/lib/axios";
 import LoadingSpinner from "@/components/ui/custom/LoadingSpinner";
 import usePageTitle from "@/hooks/usePageTitle";
@@ -27,20 +27,30 @@ const ProductDetails = () => {
   const [selected, setSelected] = useState(0);
   const [type, SetType] = useState("ser");
 
-  const { data: details, isLoading } = useQuery({
-    queryKey: ["details", id],
-    queryFn: async () => {
+  const {
+    data: details,
+    isPending: isLoading,
+    mutateAsync: fetchDetails,
+    error,
+  } = useMutation({
+    // queryKey: ["details", id],
+    mutationFn: async () => {
       try {
         const response = await axios.get(`/products/${id}`);
         return response.data;
       } catch (error) {
         console.error("Error fetching product details:", error);
+        return null;
         throw error;
       }
     },
   });
 
   usePageTitle({ title: details?.title });
+
+  useEffect(() => {
+    fetchDetails();
+  }, [id]);
 
   const ratingStats = [
     {
@@ -72,6 +82,10 @@ const ProductDetails = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (!details) {
+    <div>error</div>;
   }
 
   return (
