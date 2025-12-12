@@ -28,12 +28,14 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "../ui/dropdown-menu";
+import useCartStore from "@/store/cartstore";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [dropMenu, setDropMenu] = useState(false);
   const [notifiOpen, setNotifiOpen] = useState(false);
+  const cartItems = useCartStore((state) => state.cartItems);
 
   const navigate = useNavigate();
   const isLogin = useAuthStore((state) => state.isLogin);
@@ -139,15 +141,22 @@ const Navbar = () => {
                   }
                 />
 
-                <Button
-                  variant="outline"
-                  iconType="icon-only"
-                  Icon={ShoppingCart}
-                  onClick={() => navigate("/cart")}
-                  className={
-                    "h-9 w-9 text-gray-400 hover:text-blue-500 mr-3 border-none"
-                  }
-                />
+                <div className="relative">
+                  <div>
+                    <div className="absolute top-0 right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+                      {cartItems?.length}
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    iconType="icon-only"
+                    Icon={ShoppingCart}
+                    onClick={() => navigate("/cart")}
+                    className={
+                      "h-9 w-9 text-gray-400 hover:text-blue-500 mr-3 border-none"
+                    }
+                  />
+                </div>
 
                 <div className="relative">
                   <DropdownMenu>
