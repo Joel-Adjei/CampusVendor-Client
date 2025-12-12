@@ -17,6 +17,7 @@ import VerifyOtp from "@/pages/auth/VerifyOtp";
 import Search from "@/pages/user/Search";
 import Products from "@/pages/user/Products";
 import ProductDetails from "@/pages/user/ProductDetails";
+import Cart from "@/pages/user/Cart";
 
 const Router = () => {
   return (
@@ -25,6 +26,7 @@ const Router = () => {
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetails />} />
         </Route>

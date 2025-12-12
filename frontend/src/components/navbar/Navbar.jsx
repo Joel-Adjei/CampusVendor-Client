@@ -20,13 +20,22 @@ import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
 import VendorProfilePanel from "../vendor/VendorProfilePanel";
 import { images } from "@/assets/assets";
-import UserProfilePanel from "../user/UserProfilePanel";
+import UserProfileMenu from "../user/UserProfileMenu";
 import { FaStore } from "react-icons/fa";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "../ui/dropdown-menu";
+import useCartStore from "@/store/cartstore";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [dropMenu, setDropMenu] = useState(false);
   const [notifiOpen, setNotifiOpen] = useState(false);
+  const cartItems = useCartStore((state) => state.cartItems);
 
   const navigate = useNavigate();
   const isLogin = useAuthStore((state) => state.isLogin);
@@ -132,23 +141,39 @@ const Navbar = () => {
                   }
                 />
 
-                <Button
-                  variant="outline"
-                  iconType="icon-only"
-                  Icon={ShoppingCart}
-                  // onClick={()=> setNotifiOpen(!notifiOpen)}
-                  className={
-                    "h-9 w-9 text-gray-400 hover:text-blue-500 mr-3 border-none"
-                  }
-                />
+                <div className="relative">
+                  <div>
+                    <div className="absolute top-0 right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+                      {cartItems?.length}
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    iconType="icon-only"
+                    Icon={ShoppingCart}
+                    onClick={() => navigate("/cart")}
+                    className={
+                      "h-9 w-9 text-gray-400 hover:text-blue-500 mr-3 border-none"
+                    }
+                  />
+                </div>
 
-                <Button
-                  variant="outline"
-                  iconType="icon-only"
-                  Icon={User}
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className={"h-9 w-9"}
-                />
+                <div className="relative">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button
+                        variant="outline"
+                        iconType="icon-only"
+                        Icon={User}
+                        onClick={() => setDropMenu(!dropMenu)}
+                        className={"h-9 w-9"}
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className={"mr-3"}>
+                      <UserProfileMenu />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </>
             ) : (
               <div className="flex items-center">
@@ -183,9 +208,6 @@ const Navbar = () => {
 
       <Sidebar isOpen={profileOpen} position="right" onOpen={setProfileOpen}>
         {role === "vendor" && <VendorProfilePanel />}
-        {role.role === "customer" && (
-          <UserProfilePanel onClose={setProfileOpen} />
-        )}
       </Sidebar>
 
       {/* --- Mobile Off-Canvas Menu Content --- */}

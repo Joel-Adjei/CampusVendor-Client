@@ -7,13 +7,15 @@ import ProductCard from "@/components/ui/ProductCard";
 import { getRatingStars } from "@/lib/minComp";
 import { formatPrice } from "@/lib/utils";
 import { BookMarked } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/lib/axios";
 import LoadingSpinner from "@/components/ui/custom/LoadingSpinner";
 import usePageTitle from "@/hooks/usePageTitle";
+import useCartStore from "@/store/cartstore";
+import { toast } from "react-toastify";
 
 const images = [
   "https://picsum.photos/id/1018/800/800",
@@ -24,8 +26,19 @@ const images = [
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const addItem = useCartStore((state) => state.addItem);
   const [selected, setSelected] = useState(0);
-  const [type, SetType] = useState("ser");
+  const [type, SetType] = useState("product");
+
+  const handleAddItem = async (item) => {
+    try {
+      await addItem(item);
+      toast.success("Item added to cart!");
+    } catch (error) {
+      toast.error("Failed to add item to cart.");
+      throw new error(`Failed to add item to cart: ${error.message}`);
+    }
+  };
 
   const {
     data: details,
@@ -174,7 +187,13 @@ const ProductDetails = () => {
             </button> */}
 
             {type == "product" ? (
-              <Button Icon={FaShoppingCart} iconType="icon-right">
+              <Button
+                Icon={FaShoppingCart}
+                onClick={() => {
+                  handleAddItem(details);
+                }}
+                iconType="icon-right"
+              >
                 Add to cart
               </Button>
             ) : (
