@@ -20,12 +20,19 @@ import { toast } from "react-toastify";
 import { Sidebar, SidebarHeader } from "../ui/Siderbar";
 import VendorProfilePanel from "../vendor/VendorProfilePanel";
 import { images } from "@/assets/assets";
-import UserProfilePanel from "../user/UserProfilePanel";
+import UserProfileMenu from "../user/UserProfileMenu";
 import { FaStore } from "react-icons/fa";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "../ui/dropdown-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [dropMenu, setDropMenu] = useState(false);
   const [notifiOpen, setNotifiOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -136,19 +143,28 @@ const Navbar = () => {
                   variant="outline"
                   iconType="icon-only"
                   Icon={ShoppingCart}
-                  // onClick={()=> setNotifiOpen(!notifiOpen)}
+                  onClick={() => navigate("/cart")}
                   className={
                     "h-9 w-9 text-gray-400 hover:text-blue-500 mr-3 border-none"
                   }
                 />
 
-                <Button
-                  variant="outline"
-                  iconType="icon-only"
-                  Icon={User}
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className={"h-9 w-9"}
-                />
+                <div className="relative">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button
+                        variant="outline"
+                        iconType="icon-only"
+                        Icon={User}
+                        onClick={() => setDropMenu(!dropMenu)}
+                        className={"h-9 w-9"}
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className={"mr-3"}>
+                      <UserProfileMenu />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </>
             ) : (
               <div className="flex items-center">
@@ -183,9 +199,6 @@ const Navbar = () => {
 
       <Sidebar isOpen={profileOpen} position="right" onOpen={setProfileOpen}>
         {role === "vendor" && <VendorProfilePanel />}
-        {role.role === "customer" && (
-          <UserProfilePanel onClose={setProfileOpen} />
-        )}
       </Sidebar>
 
       {/* --- Mobile Off-Canvas Menu Content --- */}
