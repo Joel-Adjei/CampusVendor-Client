@@ -162,7 +162,7 @@ const Login = () => {
                 <Button
                   type="submit"
                   disabled={loginFormik.isSubmitting || !loginFormik.isValid}
-                  className={"mx-auto mt-3"}
+                  className={"mx-auto px-8 py-2 mt-3"}
                   isLoading={loginFormik.isSubmitting}
                 >
                   {loginFormik.isSubmitting ? "Loging..." : `Login`}
