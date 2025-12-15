@@ -14,11 +14,14 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/ui/custom/Button";
+import Title from "@/components/ui/custom/Title";
+import usePageTitle from "@/hooks/usePageTitle";
 
 const Cart = () => {
   const { cartItems, removeItem, clearCart } = useCartStore();
   const navigate = useNavigate();
   const [itemQuantities, setItemQuantities] = useState({});
+  usePageTitle({ title: `Cart (${cartItems?.length})` });
 
   const handleQuantityChange = (itemId, quantity) => {
     if (quantity < 1) return;
@@ -50,26 +53,15 @@ const Cart = () => {
         <div className="mb-8 animate-fade-in">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold mb-6 transition-colors duration-300"
+            className="flex text-sm items-center gap-2 text-slate-600 hover:text-slate-700 font-semibold mb-6 transition-colors duration-300 cursor-pointer"
           >
             <ArrowLeft size={20} />
             Continue Shopping
           </button>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-                <ShoppingCart className="text-white" size={28} />
-              </div>
-              <h1 className="text-4xl font-bold text-gray-900">
-                Shopping Cart
-              </h1>
-            </div>
-            <div className="text-right">
-              <p className="text-gray-600 text-sm">Total Items</p>
-              <p className="text-3xl font-bold text-blue-600">
-                {cartItems.length}
-              </p>
+          <div className="flex items-center justify-center">
+            <div>
+              <Title title={"Shopping Cart"} />
             </div>
           </div>
         </div>
@@ -110,18 +102,18 @@ const Cart = () => {
                   {cartItems.map((item, index) => (
                     <div
                       key={item.id}
-                      className="p-6 hover:bg-gray-50 transition-colors duration-300 animate-slide-in"
+                      className="p-3.5 hover:bg-gray-50 transition-colors duration-300 animate-slide-in"
                       style={{
                         animationDelay: `${index * 0.1}s`,
                       }}
                     >
-                      <div className="flex gap-6">
+                      <div className="relative flex flex-col items-center md:flex-row gap-6">
                         {/* Product Image */}
                         <div className="flex-shrink-0">
-                          <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300">
-                            {item.image ? (
+                          <div className="w-28 h-28 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300">
+                            {item.thumbnail ? (
                               <img
-                                src={item.image}
+                                src={item.thumbnail}
                                 alt={item.title}
                                 className="w-full h-full object-cover rounded-lg"
                               />
@@ -136,17 +128,17 @@ const Cart = () => {
 
                         {/* Product Details */}
                         <div className="flex-grow">
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">
+                          <h3 className="text-sm font-bold text-gray-900 mb-1">
                             {item.title || "Product"}
                           </h3>
-                          <p className="text-gray-600 text-sm mb-3">
+                          <p className="text-gray-600 text-xs mb-3">
                             {item.vendor || "Vendor"}
                           </p>
 
                           {/* Price and Details */}
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                              <p className="text-2xl font-bold text-blue-600">
+                              <p className="text-sm font-bold text-slate-600">
                                 ${item.price || 0}
                               </p>
                               {item.originalPrice && (
@@ -167,7 +159,7 @@ const Cart = () => {
                                 }
                                 className="p-1 hover:bg-gray-200 rounded transition-colors duration-200"
                               >
-                                <Minus size={18} className="text-gray-600" />
+                                <Minus size={15} className="text-gray-600" />
                               </button>
                               <input
                                 type="number"
@@ -178,7 +170,7 @@ const Cart = () => {
                                     parseInt(e.target.value) || 1
                                   )
                                 }
-                                className="w-12 text-center bg-white border border-gray-300 rounded font-semibold text-gray-900"
+                                className="w-12 text-center text-sm bg-white border border-gray-300 rounded font-semibold text-gray-900"
                                 min="1"
                               />
                               <button
@@ -190,17 +182,17 @@ const Cart = () => {
                                 }
                                 className="p-1 hover:bg-gray-200 rounded transition-colors duration-200"
                               >
-                                <Plus size={18} className="text-gray-600" />
+                                <Plus size={15} className="text-gray-600" />
                               </button>
                             </div>
                           </div>
                         </div>
 
                         {/* Remove Button */}
-                        <div className="flex-shrink-0">
+                        <div className="absolute top-2 right-2 md:left-2 flex-shrink-0">
                           <button
                             onClick={() => removeItem(item.id)}
-                            className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-300"
+                            className="p-2 bg-white text-red-500 hover:text-red-700 hover:bg-red-50 rounded-sm cursor-pointer transition-all duration-300"
                           >
                             <Trash2 size={20} />
                           </button>
@@ -211,58 +203,22 @@ const Cart = () => {
                 </div>
 
                 {/* Cart Actions */}
-                <div className="p-6 bg-gray-50 border-t border-gray-200 flex gap-3">
-                  <button
-                    onClick={handleContinueShopping}
-                    className="flex-1 px-4 py-3 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all duration-300"
-                  >
-                    Continue Shopping
-                  </button>
+                <div className="p-6 bg-gray-50 border-t border-gray-200 flex justify-between gap-3">
                   <button
                     onClick={clearCart}
-                    className="flex-1 px-4 py-3 border-2 border-red-500 text-red-500 font-semibold rounded-lg hover:bg-red-50 transition-all duration-300 flex items-center justify-center gap-2"
+                    className=" px-5 py-0 text-sm border  border-red-500 text-red-500 font-semibold rounded-sm cursor-pointer hover:bg-red-50 transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <Trash2 size={18} />
                     Clear Cart
                   </button>
-                </div>
-              </div>
 
-              {/* Benefits Section */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300 border-l-4 border-blue-500">
-                  <div className="flex items-center gap-3">
-                    <Zap className="text-yellow-500" size={24} />
-                    <div>
-                      <p className="font-semibold text-gray-900">
-                        Fast Checkout
-                      </p>
-                      <p className="text-xs text-gray-600">Quick & secure</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300 border-l-4 border-green-500">
-                  <div className="flex items-center gap-3">
-                    <Truck className="text-green-500" size={24} />
-                    <div>
-                      <p className="font-semibold text-gray-900">
-                        Free Shipping
-                      </p>
-                      <p className="text-xs text-gray-600">
-                        On orders over $100
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300 border-l-4 border-purple-500">
-                  <div className="flex items-center gap-3">
-                    <Shield className="text-purple-500" size={24} />
-                    <div>
-                      <p className="font-semibold text-gray-900">Guaranteed</p>
-                      <p className="text-xs text-gray-600">Safe & secured</p>
-                    </div>
+                  <div className="text-right">
+                    <p className="text-gray-600 text-sm font-semibold">
+                      Total Items
+                    </p>
+                    <p className="text-lg bg-white border border-gray-300 px-2 rounded font-bold text-gray-700">
+                      {cartItems.length}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -313,13 +269,13 @@ const Cart = () => {
                 </div>
 
                 {/* Checkout Button */}
-                <button className="w-full bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold py-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 flex items-center justify-center gap-2 group">
+                <Button variant="secondary" className="w-full py-4">
                   <ShoppingCart
                     size={20}
                     className="group-hover:animate-bounce"
                   />
                   Proceed to Checkout
-                </button>
+                </Button>
 
                 {/* Additional Info */}
                 <div className="mt-8 pt-8 border-t border-blue-400 space-y-3">
