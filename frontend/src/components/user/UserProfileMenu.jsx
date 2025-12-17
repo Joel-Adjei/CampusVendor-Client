@@ -16,7 +16,7 @@ const UserProfileMenu = () => {
 
   return (
     <>
-      <DropdownMenuItem className={"p-2"}>
+      <DropdownMenuItem className={"p-2 w-50"}>
         <div className=" text-white rounded-md">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-700 to-blue-500 rounded-full flex items-center justify-center">
@@ -40,9 +40,10 @@ const UserProfileMenu = () => {
         <Button
           variant="outline"
           Icon={LogOut}
-          className="w-full text-red-600 border-red-200 hover:bg-red-50"
+          className="w-full py-1 text-slate-600 border-slate-300 hover:bg-blue-50"
           onClick={handleLogout}
           iconSize={13}
+          iconStyle={"text-red-600"}
         >
           Logout
         </Button>

@@ -1,6 +1,8 @@
 export const defaultAdmin = {
   id: "101",
   name: "Joel Adjei",
+  phoneNumber: "0234345678",
+  pickupLocation: "Legon-Hall",
   email: "admin@admin.com",
   password: "12345678",
   role: "admin",

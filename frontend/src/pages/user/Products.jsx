@@ -2,7 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import React, { useEffect, useRef, useState } from "react";
 import CusSelect from "@/components/ui/custom/Select";
 import { ArrowLeft, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "@/lib/axios";
 import ProductCard from "@/components/ui/ProductCard";
@@ -13,6 +13,8 @@ import LoadingSpinner from "@/components/ui/custom/LoadingSpinner";
 const Products = () => {
   usePageTitle({ title: "Products" });
   const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useSearchParams();
+  const [categoryQuery, setCategoryQuery] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -52,6 +54,7 @@ const Products = () => {
     mutationFn: async () => {
       if (selectedCategory !== "all") {
         try {
+          setCategoryQuery({ category: selectedCategory });
           const response = await axios.get(
             `/products/category/${selectedCategory}`
           );
@@ -62,6 +65,7 @@ const Products = () => {
         }
       }
       try {
+        setSearchQuery({ q: query });
         const response = await axios.get(`/products/search?q=${query}`);
         return response.data.products;
       } catch (error) {
@@ -73,6 +77,10 @@ const Products = () => {
   });
 
   useEffect(() => {
+    const cate = categoryQuery.get("category");
+    if (cate) setSelectedCategory(cate);
+    const q = searchQuery.get("q");
+    if (q) setQuery(q);
     InputRef.current?.focus();
   }, []);
 
@@ -116,6 +124,7 @@ const Products = () => {
             optionsLabel={"Categories"}
             options={[
               { label: "All Categories", value: "all" },
+              { label: "All Shoes", value: "shoe" },
               ...(categories?.map((category) => ({
                 label: category,
                 value: category,
