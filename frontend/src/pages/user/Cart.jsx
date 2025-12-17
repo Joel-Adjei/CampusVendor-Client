@@ -11,6 +11,7 @@ import {
   Shield,
   CheckCircle,
   X,
+  ShoppingBag,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/ui/custom/Button";
@@ -47,46 +48,51 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 animate-fade-in">
           <button
             onClick={() => navigate(-1)}
-            className="flex text-sm items-center gap-2 text-slate-600 hover:text-slate-700 font-semibold mb-6 transition-colors duration-300 cursor-pointer"
+            className="flex text-sm items-center gap-2 text-slate-600 hover:text-slate-700 font-Montserrat mb-6 transition-colors duration-300 cursor-pointer"
           >
             <ArrowLeft size={20} />
             Continue Shopping
           </button>
 
-          <div className="flex items-center justify-center">
-            <div>
-              <Title title={"Shopping Cart"} />
+          {cartItems.length > 0 && (
+            <div className="flex items-center justify-center">
+              <div>
+                <Title title={"Shopping Cart"} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {cartItems.length === 0 ? (
           // Empty Cart State
-          <div className="text-center py-16 animate-fade-in">
+          <div className="text-center py-16 animate-fade-in font-Montserrat">
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <div className="absolute inset-0 bg-yellow-400 opacity-20 blur-xl rounded-full"></div>
                 <ShoppingCart
                   size={80}
-                  className="text-gray-300 relative z-10"
+                  className="text-slate-400 relative z-10"
                 />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-Montserrat font-bold text-blue-900 mb-2">
               Your cart is empty
             </h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-500 mb-8">
               Looks like you haven't added any items yet. Let's change that!
             </p>
             <Button
               onClick={handleContinueShopping}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-lg font-semibold inline-flex items-center gap-2 transition-all duration-300 hover:shadow-lg"
+              variant="secondary"
+              className="px-8 py-3 mx-auto"
+              iconSize={15}
+              iconType="icon-right"
+              Icon={ShoppingBag}
             >
               Start Shopping
             </Button>
